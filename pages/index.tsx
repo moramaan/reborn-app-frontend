@@ -9,6 +9,49 @@ const ProductCard = dynamic(() => import("@/components/product-card"), {
   ssr: false,
 });
 
+const jsonData = [
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+  {
+    title: "Curso de Next.js",
+    img: "https://nextui.org/images/album-cover.png",
+    price: "500€",
+  },
+];
+
 export default function IndexPage() {
   return (
     <DefaultLayout>
@@ -47,7 +90,7 @@ export default function IndexPage() {
         <div className="max-w-5xl w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
           <h4 className={title({ color: "yellow" })}>Productos</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <ProductCard
+            {/* <ProductCard
               title="Curso de Next.js"
               img="https://nextui.org/images/album-cover.png"
               price="500€"
@@ -66,7 +109,10 @@ export default function IndexPage() {
               title="Curso de Next.js"
               img="https://nextui.org/images/album-cover.png"
               price="500€"
-            />
+            /> */}
+            {jsonData.map((data, index) => (
+              <ProductCard key={index} {...data} />
+            ))}
           </div>
         </div>
       </section>
