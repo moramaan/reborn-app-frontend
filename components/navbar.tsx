@@ -8,8 +8,8 @@ import {
   NavbarBrand,
   NavbarItem,
   NavbarMenuItem,
+  Button,
 } from "@nextui-org/react";
-
 import { link as linkStyles } from "@nextui-org/theme";
 
 import { siteConfig } from "@/config/site";
@@ -20,6 +20,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon } from "@/components/icons";
 
 import RebornLogo from "@/components/reborn-logo";
+import { SearchButton } from "@/components/search-button";
 
 export const Navbar = () => {
   const searchInput = (
@@ -32,21 +33,29 @@ export const Navbar = () => {
       labelPlacement="outside"
       placeholder="Search..."
       endContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        <SearchButton
+          className="rounded-l-none"
+          variant="shadow"
+          color="green"
+          size="md"
+          style={{ width: "2rem" }}
+        >
+          <SearchIcon className="text-base pointer-events-none flex-shrink-0" />
+        </SearchButton>
       }
       type="search"
     />
   );
 
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <RebornLogo Width={150} Height={200}></RebornLogo>
           </NextLink>
         </NavbarBrand>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        <NavbarItem className="hidden lg:flex basis-4/6" >{searchInput}</NavbarItem>
       </NavbarContent>
 
       <NavbarContent
@@ -82,7 +91,7 @@ export const Navbar = () => {
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <NavbarMenu>
+      <NavbarMenu className="little-menu">
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (

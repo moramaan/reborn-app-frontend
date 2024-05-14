@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+nav .px-3, .little-menu .px-3 {
+    padding-right: 0rem;
+}
