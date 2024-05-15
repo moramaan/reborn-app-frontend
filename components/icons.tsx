@@ -166,6 +166,62 @@ export const HeartIcon = ({
   </svg>
 );
 
+export const RightArrow = ({
+  size = 24,
+  width,
+  height,
+  strokeWidth = 2.5,
+  fill = "none",
+  ...props
+}: IconSvgProps) => (
+  <svg
+    aria-hidden="true"
+    fill={fill}
+    focusable="false"
+    height={size || height}
+    role="presentation"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M8.90997 19.92L15.43 13.4C16.2 12.63 16.2 11.37 15.43 10.6L8.90997 4.08002"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={strokeWidth}
+    />
+  </svg>
+);
+
+export const LeftArrow = ({
+  size = 24,
+  width,
+  height,
+  strokeWidth = 2.5,
+  fill = "none",
+  ...props
+}: IconSvgProps) => (
+  <svg
+    aria-hidden="true"
+    fill={fill}
+    focusable="false"
+    height={size || height}
+    role="presentation"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M15 19.92L8.48003 13.4C7.71003 12.63 7.71003 11.37 8.48003 10.6L15 4.08002"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={strokeWidth}
+    />
+  </svg>
+);
+
 export const SearchIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"
