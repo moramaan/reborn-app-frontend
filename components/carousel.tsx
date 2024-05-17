@@ -22,16 +22,8 @@ const Carousel: React.FC = () => {
   };
 
   return (
-    <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 relative">
-      <Card className="col-span-12 sm:col-span-8 h-[300px]">
-        <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-          <p className="text-tiny text-white/60 uppercase font-bold">
-            What to watch
-          </p>
-          <h4 className="text-white font-medium text-large">
-            Stream the Acme event
-          </h4>
-        </CardHeader>
+    <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] px-2 md:px-8 relative">
+      <Card className="max-w-[600px] h-[200px] md:h-[300px] lg:h-[400px] mx-auto">
         <Image
           removeWrapper
           alt="Card background"
