@@ -22,7 +22,8 @@ const Carousel: React.FC = () => {
   };
 
   return (
-    <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] px-2 md:px-8 relative">
+    <div className="w-[300px] sm:w-[400px] md:w-[500px] px-8 relative mx-auto">
+    {/* <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] px-2 md:px-8 relative mx-auto"> */}
       <Card className="max-w-[600px] h-[200px] md:h-[300px] lg:h-[400px] mx-auto">
         <Image
           removeWrapper
