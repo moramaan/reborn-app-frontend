@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import { Card, CardHeader, Image, Button } from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
+import { Card, Image, Button } from "@nextui-org/react";
 import { LeftArrow, RightArrow } from "./icons";
 import Swipe from "react-easy-swipe";
 
-const images: string[] = [
+interface CarouselProps {
+  images: string[];
+}
+
+const defaultImages: string[] = [
   "https://nextui.org/images/card-example-4.jpeg",
   "https://nextui.org/images/card-example-3.jpeg",
   "https://nextui.org/images/card-example-2.jpeg",
 ];
 
-const Carousel: React.FC = () => {
+const Carousel: React.FC<CarouselProps> = ({ images: initialImages }) => {
+  const [images, setImages] = useState<string[]>(initialImages.length > 0 ? initialImages : defaultImages);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const nextImage = () => {
@@ -21,6 +26,14 @@ const Carousel: React.FC = () => {
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
+
+  useEffect(() => {
+    if (initialImages.length === 0) {
+      setImages(defaultImages);
+    } else {
+      setImages(initialImages);
+    }
+  }, [initialImages]);
 
   return (
     <div className="w-full sm:w-[400px] md:w-[500px] relative mx-auto">
