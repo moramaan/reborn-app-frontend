@@ -46,6 +46,56 @@ export const MailIcon: React.FC<IconSvgProps> = ({
   </svg>
 );
 
+export const PersonIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    height={size || height}
+    role="presentation"
+    viewBox="0 0 24 24"
+    width={size || width}
+    {...props}
+  >
+    <path
+      d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81V16.18C2 19.83 4.17 22 7.81 22H16.18C19.82 22 21.99 19.83 21.99 16.19V7.81C22 4.17 19.83 2 16.19 2ZM8.5 6.38C9.53 6.38 10.38 7.22 10.38 8.26C10.38 9.3 9.54 10.14 8.5 10.14C7.46 10.14 6.62 9.28 6.62 8.25C6.62 7.22 7.47 6.38 8.5 6.38ZM12 19.08C9.31 19.08 7.12 16.89 7.12 14.2C7.12 13.5 7.69 12.92 8.39 12.92H15.59C16.29 12.92 16.86 13.49 16.86 14.2C16.88 16.89 14.69 19.08 12 19.08ZM15.5 10.12C14.47 10.12 13.62 9.28 13.62 8.24C13.62 7.2 14.46 6.36 15.5 6.36C16.54 6.36 17.38 7.2 17.38 8.24C17.38 9.28 16.53 10.12 15.5 10.12Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+export const MessageIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    height={size || height}
+    role="presentation"
+    viewBox="0 0 24 24"
+    width={size || width}
+    {...props}
+  >
+    <path
+      d="M18.47 16.83L18.86 19.99C18.96 20.82 18.07 21.4 17.36 20.97L13.9 18.91C13.66 18.77 13.6 18.47 13.73 18.23C14.23 17.31 14.5 16.27 14.5 15.23C14.5 11.57 11.36 8.59 7.50002 8.59C6.71002 8.59 5.94002 8.71 5.22002 8.95C4.85002 9.07 4.49002 8.73 4.58002 8.35C5.49002 4.71 8.99002 2 13.17 2C18.05 2 22 5.69 22 10.24C22 12.94 20.61 15.33 18.47 16.83Z"
+      fill="currentColor"
+    />
+    <path
+      d="M13 15.23C13 16.42 12.56 17.52 11.82 18.39C10.83 19.59 9.26 20.36 7.5 20.36L4.89 21.91C4.45 22.18 3.89 21.81 3.95 21.3L4.2 19.33C2.86 18.4 2 16.91 2 15.23C2 13.47 2.94 11.92 4.38 11C5.27 10.42 6.34 10.09 7.5 10.09C10.54 10.09 13 12.39 13 15.23Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 export const GithubIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,

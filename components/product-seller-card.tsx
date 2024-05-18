@@ -1,6 +1,8 @@
 import React from "react";
 import { Card, CardHeader, Avatar, Button } from "@nextui-org/react";
 import { HeartIcon } from "@/components/icons";
+import UserContactData from "@/components/user-contact-data";
+
 
 export default function ProductSellerCard() {
   const [liked, setLiked] = React.useState(false);
@@ -30,14 +32,15 @@ export default function ProductSellerCard() {
           <h4 className="text-small font-semibold leading-none text-default-600">
             @zoeylang
           </h4>
-          <Button
+          {/* <Button
             className="font-semibold"
             color="primary"
             radius="full"
             size="sm"
           >
             Contactar
-          </Button>
+          </Button> */}
+          <UserContactData />
         </div>
       </CardHeader>
     </Card>
