@@ -1,18 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "@/components/product-card";
-
-interface Product {
-  title: string;
-  img: string;
-  price: string;
-}
+import { useProductContext } from "@/context/ProductContext";
+import { Product } from "@/types";
 
 interface ProductListProps {
   apiUrl: string;
 }
 
 function ProductList({ apiUrl }: ProductListProps) {
-  const [productData, setProductData] = useState<Product[]>([]);
+  const { products, setProducts } = useProductContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -24,7 +20,7 @@ function ProductList({ apiUrl }: ProductListProps) {
           throw new Error("Failed to fetch product data");
         }
         const jsonData: Product[] = await response.json();
-        setProductData(jsonData);
+        setProducts(jsonData);
         setLoading(false);
       } catch (error: any) {
         setError(error as Error);
@@ -33,7 +29,7 @@ function ProductList({ apiUrl }: ProductListProps) {
     };
 
     fetchProductData();
-  }, [apiUrl]);
+  }, [apiUrl, setProducts]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -45,8 +41,8 @@ function ProductList({ apiUrl }: ProductListProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {productData.map((data, index) => (
-        <ProductCard key={index} {...data} />
+      {products.map((data) => (
+        <ProductCard key={data.id} {...data} />
       ))}
     </div>
   );

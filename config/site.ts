@@ -13,10 +13,6 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Producto-test",
-      href: "/product",
-    },
-    {
       label: "Soporte",
       href: "/help-feedback",
     },

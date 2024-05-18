@@ -1,26 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { HeartIcon } from "./icons";
+import { useProductContext } from "@/context/ProductContext";
+import { Product } from "@/types";
 
-interface ProductCardProps {
-  title: string;
-  img: string;
-  price: string;
-}
+const ProductCard: React.FC<Product> = ({ ...data }) => {
+  const [liked, setLiked] = useState(false);
+  const router = useRouter();
+  const { setSelectedProduct } = useProductContext();
 
-const ProductCard: React.FC<ProductCardProps> = ({ title, img, price }) => {
-  const [liked, setLiked] = React.useState(false);
+  const handleClick = () => {
+    setSelectedProduct({ ...data });
+
+    // Save product data to local storage
+    localStorage.setItem("selectedProduct", JSON.stringify(data));
+
+    router.push(`/product/${data.id}`);
+  };
 
   return (
-    <Card shadow="sm" isPressable onPress={() => console.log("item pressed")}>
+    <Card shadow="sm" isPressable onPress={handleClick}>
       <CardBody className="relative p-0">
         <Image
           shadow="sm"
           radius="none"
           width="100%"
-          alt={title}
+          alt={data.title}
           className="w-full object-cover h-[200px] relative z-0"
-          src={img}
+          src={data.img}
         />
         <Button
           isIconOnly
@@ -34,8 +42,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, img, price }) => {
         </Button>
       </CardBody>
       <CardFooter className="text-small flex-col items-start gap-1">
-        <b>{title}</b>
-        <p className="text-default-500">{price}</p>
+        <b>{data.title}</b>
+        <p className="text-default-500">{data.price}€</p>
       </CardFooter>
     </Card>
   );
