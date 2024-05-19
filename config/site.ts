@@ -13,11 +13,19 @@ export const siteConfig = {
       href: "/",
     },
     {
+      label: "Search-test",
+      href: "/search",
+    },
+    {
       label: "Soporte",
       href: "/help-feedback",
     },
   ],
   navMenuItems: [
+    {
+      label: "Inicio",
+      href: "/",
+    },
     {
       label: "Perfil",
       href: "/",
@@ -25,6 +33,10 @@ export const siteConfig = {
     {
       label: "Panel de control",
       href: "/",
+    },
+    {
+      label: "Search-test",
+      href: "/search",
     },
     {
       label: "Soporte",
