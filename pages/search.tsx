@@ -4,6 +4,7 @@ import SearchLayout from "@/layouts/search-layout";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useProductContext } from "@/context/ProductContext";
+import { Product } from "@/types/index";
 
 // dynamic import with SSR disabled due to hydration error
 const ProductCard = dynamic(() => import("@/components/product-card"), {
@@ -157,10 +158,22 @@ const jsonData = [
   },
 ];
 
+//function to find the higher price
+function findMaxValue(products: Product[]) {
+  let maxValue = 0;
+  products.forEach((product: Product) => {
+    if (product.price > maxValue) {
+      maxValue = product.price;
+    }
+  });
+  return maxValue;
+}
+
 export default function HelpFeedbackPage() {
   const { products, setProducts } = useProductContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const [maxValue, setMaxValue] = useState<number>(1000);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -171,6 +184,7 @@ export default function HelpFeedbackPage() {
         // }
         // const jsonData = await response.json();
         setProducts(jsonData);
+        setMaxValue(findMaxValue(jsonData));
         setLoading(false);
       } catch (error: any) {
         setError(error as Error);
@@ -202,7 +216,7 @@ export default function HelpFeedbackPage() {
       <section className="flex flex-col items-center justify-center py-4">
         <div className="grid grid-cols-12 gap-5 max-w-[1400px] w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
           <div className="col-span-3 h-full">
-            <FilterCard />
+            <FilterCard maxValue={maxValue} />
           </div>
           <div className="col-span-9 h-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

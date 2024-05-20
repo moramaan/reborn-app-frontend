@@ -43,10 +43,14 @@ const dateRanges: Option[] = [
   { value: "30", label: "30 días" },
 ];
 
-const FilterCard: React.FC = () => {
+interface FilterCardProps {
+  maxValue: number;
+}
+
+const FilterCard: React.FC<FilterCardProps> = ({ maxValue }) => {
   const { setFilters } = useFilterContext();
   const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(800);
+  const [maxPrice, setMaxPrice] = useState<number>(maxValue);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCondition, setSelectedCondition] = useState<string>("");
   const [selectedState, setSelectedState] = useState<Option | null>(null);
@@ -112,7 +116,7 @@ const FilterCard: React.FC = () => {
           </div>
           <Slider
             step={100}
-            maxValue={3000}
+            maxValue={maxValue}
             minValue={0}
             value={[minPrice, maxPrice]}
             onChange={handleSliderChange}
