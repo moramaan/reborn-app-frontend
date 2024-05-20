@@ -1,866 +1,52 @@
-// import React, { useState, useContext } from "react";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Autocomplete,
-//   AutocompleteItem,
-//   Button,
-// } from "@nextui-org/react";
-// import { FilterContext } from "../context/FilterContext";
-// import { states, cities } from "../data/locations";
-
-// type Option = {
-//   value: string;
-//   label: string;
-// };
-
-// const FilterCard: React.FC = () => {
-//   const { setFilters } = useContext(FilterContext);
-//   const [minPrice, setMinPrice] = useState<string>("");
-//   const [maxPrice, setMaxPrice] = useState<string>("");
-//   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-//   const [selectedCondition, setSelectedCondition] = useState<string>("");
-//   const [selectedState, setSelectedState] = useState<Option | null>(null);
-//   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
-//   const [publishedSince, setPublishedSince] = useState<string>("");
-
-//   const handleStateChange = (state: Option) => {
-//     setSelectedState(state);
-//     setSelectedCity(null); // Reset city selection when state changes
-//   };
-
-//   const handleCategoryChange = (category: string) => {
-//     setSelectedCategories((prevCategories) =>
-//       prevCategories.includes(category)
-//         ? prevCategories.filter((cat) => cat !== category)
-//         : [...prevCategories, category]
-//     );
-//   };
-
-//   const handleApplyFilters = () => {
-//     const filters = {
-//       minPrice,
-//       maxPrice,
-//       categories: selectedCategories,
-//       condition: selectedCondition,
-//       state: selectedState?.value || "",
-//       city: selectedCity?.value || "",
-//       publishedSince,
-//     };
-
-//     setFilters(filters);
-
-//     // Optionally make an API call here if you want to fetch filtered data immediately
-//   };
-
-//   return (
-//     <Card className="p-6 bg-white rounded-lg shadow-md max-w-sm">
-//       <CardHeader>
-//         <h4 className="text-lg font-semibold mb-4">Filter Products</h4>
-//       </CardHeader>
-//       <CardBody>
-//         {/* Price Range Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Price Range
-//           </label>
-//           <input
-//             placeholder="Min Price"
-//             type="number"
-//             value={minPrice}
-//             onChange={(e) => setMinPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md mb-2"
-//           />
-//           <input
-//             placeholder="Max Price"
-//             type="number"
-//             value={maxPrice}
-//             onChange={(e) => setMaxPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md"
-//           />
-//         </div>
-
-//         {/* Category Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Category
-//           </label>
-//           {[
-//             "Helmets",
-//             "Leather Suits",
-//             "Gloves",
-//             "Boots",
-//             "Jackets",
-//             "Trousers",
-//             "Underwear",
-//             "Accessories",
-//             "Spare Parts",
-//           ].map((category) => (
-//             <div key={category} className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 id={category}
-//                 checked={selectedCategories.includes(category)}
-//                 onChange={() => handleCategoryChange(category)}
-//                 className="mr-2"
-//               />
-//               <label htmlFor={category}>{category}</label>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Condition Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Condition
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["New", "Like New", "Good Condition"].map((condition) => (
-//               <div key={condition}>
-//                 <input
-//                   type="radio"
-//                   id={condition}
-//                   value={condition}
-//                   checked={selectedCondition === condition}
-//                   onChange={(e) => setSelectedCondition(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={condition}>{condition}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Location Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Location
-//           </label>
-//           <Autocomplete
-//             label="State"
-//             defaultItems={states}
-//             placeholder="Search State"
-//             selectedKey={selectedState?.value}
-//             onSelectionChange={handleStateChange}
-//             className="mb-2"
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//           <Autocomplete
-//             label="City"
-//             defaultItems={selectedState ? cities[selectedState.value] : []}
-//             placeholder="Search City"
-//             selectedKey={selectedCity?.value}
-//             onSelectionChange={setSelectedCity}
-//             isDisabled={!selectedState}
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//         </div>
-
-//         {/* Published Since Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Published Since
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["24h", "7 days", "30 days"].map((time) => (
-//               <div key={time}>
-//                 <input
-//                   type="radio"
-//                   id={time}
-//                   value={time}
-//                   checked={publishedSince === time}
-//                   onChange={(e) => setPublishedSince(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={time}>{time}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Apply Filters Button */}
-//         <Button
-//           onClick={handleApplyFilters}
-//           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-//         >
-//           Apply Filters
-//         </Button>
-//       </CardBody>
-//     </Card>
-//   );
-// };
-
-// export default FilterCard;
-
-// //v2
-// import React, { useState, useContext } from "react";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Autocomplete,
-//   AutocompleteItem,
-//   Button,
-// } from "@nextui-org/react";
-// import { FilterContext } from "../context/FilterContext";
-// import { states, cities } from "../data/locations";
-
-// type Option = {
-//   value: string;
-//   label: string;
-// };
-
-// const FilterCard: React.FC = () => {
-//   const { setFilters } = useContext(FilterContext);
-//   const [minPrice, setMinPrice] = useState<string>("");
-//   const [maxPrice, setMaxPrice] = useState<string>("");
-//   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-//   const [selectedCondition, setSelectedCondition] = useState<string>("");
-//   const [selectedState, setSelectedState] = useState<Option | null>(null);
-//   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
-//   const [publishedSince, setPublishedSince] = useState<string>("");
-
-//   const handleStateChange = (key: React.Key) => {
-//     const state = states.find((state) => state.value === key);
-//     setSelectedState(state || null);
-//     setSelectedCity(null); // Reset city selection when state changes
-//   };
-
-//   const handleCityChange = (key: React.Key) => {
-//     if (selectedState) {
-//       const city = cities[selectedState.value].find(
-//         (city) => city.value === key
-//       );
-//       setSelectedCity(city || null);
-//     }
-//   };
-
-//   const handleCategoryChange = (category: string) => {
-//     setSelectedCategories((prevCategories) =>
-//       prevCategories.includes(category)
-//         ? prevCategories.filter((cat) => cat !== category)
-//         : [...prevCategories, category]
-//     );
-//   };
-
-//   const handleApplyFilters = () => {
-//     const filters = {
-//       minPrice,
-//       maxPrice,
-//       categories: selectedCategories,
-//       condition: selectedCondition,
-//       state: selectedState?.value || "",
-//       city: selectedCity?.value || "",
-//       publishedSince,
-//     };
-
-//     setFilters(filters);
-
-//     // Optionally make an API call here if you want to fetch filtered data immediately
-//   };
-
-//   return (
-//     <Card className="p-6 bg-white rounded-lg shadow-md max-w-sm">
-//       <CardHeader>
-//         <h4 className="text-lg font-semibold mb-4">Filter Products</h4>
-//       </CardHeader>
-//       <CardBody>
-//         {/* Price Range Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Price Range
-//           </label>
-//           <input
-//             placeholder="Min Price"
-//             type="number"
-//             value={minPrice}
-//             onChange={(e) => setMinPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md mb-2"
-//           />
-//           <input
-//             placeholder="Max Price"
-//             type="number"
-//             value={maxPrice}
-//             onChange={(e) => setMaxPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md"
-//           />
-//         </div>
-
-//         {/* Category Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Category
-//           </label>
-//           {[
-//             "Helmets",
-//             "Leather Suits",
-//             "Gloves",
-//             "Boots",
-//             "Jackets",
-//             "Trousers",
-//             "Underwear",
-//             "Accessories",
-//             "Spare Parts",
-//           ].map((category) => (
-//             <div key={category} className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 id={category}
-//                 checked={selectedCategories.includes(category)}
-//                 onChange={() => handleCategoryChange(category)}
-//                 className="mr-2"
-//               />
-//               <label htmlFor={category}>{category}</label>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Condition Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Condition
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["New", "Like New", "Good Condition"].map((condition) => (
-//               <div key={condition}>
-//                 <input
-//                   type="radio"
-//                   id={condition}
-//                   value={condition}
-//                   checked={selectedCondition === condition}
-//                   onChange={(e) => setSelectedCondition(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={condition}>{condition}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Location Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Location
-//           </label>
-//           <Autocomplete
-//             label="State"
-//             defaultItems={states}
-//             placeholder="Search State"
-//             selectedKey={selectedState?.value}
-//             onSelectionChange={handleStateChange}
-//             className="mb-2"
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//           <Autocomplete
-//             label="City"
-//             defaultItems={selectedState ? cities[selectedState.value] : []}
-//             placeholder="Search City"
-//             selectedKey={selectedCity?.value}
-//             onSelectionChange={handleCityChange}
-//             isDisabled={!selectedState}
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//         </div>
-
-//         {/* Published Since Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Published Since
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["24h", "7 days", "30 days"].map((time) => (
-//               <div key={time}>
-//                 <input
-//                   type="radio"
-//                   id={time}
-//                   value={time}
-//                   checked={publishedSince === time}
-//                   onChange={(e) => setPublishedSince(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={time}>{time}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Apply Filters Button */}
-//         <Button
-//           onClick={handleApplyFilters}
-//           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-//         >
-//           Apply Filters
-//         </Button>
-//       </CardBody>
-//     </Card>
-//   );
-// };
-
-// export default FilterCard;
-
-// //v3
-// import React, { useState, useContext } from "react";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Autocomplete,
-//   AutocompleteItem,
-//   Button,
-// } from "@nextui-org/react";
-// import FilterContext from "@/context/FilterContext";
-// import { states, cities } from "../data/locations";
-
-// type Option = {
-//   value: string;
-//   label: string;
-// };
-
-// const FilterCard: React.FC = () => {
-//   const { setFilters } = useContext(FilterContext);
-//   const [minPrice, setMinPrice] = useState<string>("");
-//   const [maxPrice, setMaxPrice] = useState<string>("");
-//   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-//   const [selectedCondition, setSelectedCondition] = useState<string>("");
-//   const [selectedState, setSelectedState] = useState<Option | null>(null);
-//   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
-//   const [publishedSince, setPublishedSince] = useState<string>("");
-
-//   const handleStateChange = (key: React.Key) => {
-//     const state = states.find((state: Option) => state.value === key);
-//     setSelectedState(state || null);
-//     setSelectedCity(null); // Reset city selection when state changes
-//   };
-
-//   const handleCityChange = (key: React.Key) => {
-//     if (selectedState) {
-//       const city = cities[selectedState.value].find(
-//         (city: Option) => city.value === key
-//       );
-//       setSelectedCity(city || null);
-//     }
-//   };
-
-//   const handleCategoryChange = (category: string) => {
-//     setSelectedCategories((prevCategories) =>
-//       prevCategories.includes(category)
-//         ? prevCategories.filter((cat) => cat !== category)
-//         : [...prevCategories, category]
-//     );
-//   };
-
-//   const handleApplyFilters = () => {
-//     const filters = {
-//       minPrice,
-//       maxPrice,
-//       categories: selectedCategories,
-//       condition: selectedCondition,
-//       state: selectedState?.value || "",
-//       city: selectedCity?.value || "",
-//       publishedSince,
-//     };
-
-//     setFilters(filters);
-
-//     // Optionally make an API call here if you want to fetch filtered data immediately
-//   };
-
-//   return (
-//     <Card className="p-6 bg-white rounded-lg shadow-md max-w-sm">
-//       <CardHeader>
-//         <h4 className="text-lg font-semibold mb-4">Filter Products</h4>
-//       </CardHeader>
-//       <CardBody>
-//         {/* Price Range Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Price Range
-//           </label>
-//           <input
-//             placeholder="Min Price"
-//             type="number"
-//             value={minPrice}
-//             onChange={(e) => setMinPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md mb-2"
-//           />
-//           <input
-//             placeholder="Max Price"
-//             type="number"
-//             value={maxPrice}
-//             onChange={(e) => setMaxPrice(e.target.value)}
-//             className="block w-full border-gray-300 rounded-md"
-//           />
-//         </div>
-
-//         {/* Category Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Category
-//           </label>
-//           {[
-//             "Helmets",
-//             "Leather Suits",
-//             "Gloves",
-//             "Boots",
-//             "Jackets",
-//             "Trousers",
-//             "Underwear",
-//             "Accessories",
-//             "Spare Parts",
-//           ].map((category) => (
-//             <div key={category} className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 id={category}
-//                 checked={selectedCategories.includes(category)}
-//                 onChange={() => handleCategoryChange(category)}
-//                 className="mr-2"
-//               />
-//               <label htmlFor={category}>{category}</label>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Condition Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Condition
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["New", "Like New", "Good Condition"].map((condition) => (
-//               <div key={condition}>
-//                 <input
-//                   type="radio"
-//                   id={condition}
-//                   value={condition}
-//                   checked={selectedCondition === condition}
-//                   onChange={(e) => setSelectedCondition(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={condition}>{condition}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Location Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Location
-//           </label>
-//           <Autocomplete
-//             label="State"
-//             defaultItems={states}
-//             placeholder="Search State"
-//             selectedKey={selectedState?.value}
-//             onSelectionChange={handleStateChange}
-//             className="mb-2"
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//           <Autocomplete
-//             label="City"
-//             defaultItems={selectedState ? cities[selectedState.value] : []}
-//             placeholder="Search City"
-//             selectedKey={selectedCity?.value}
-//             onSelectionChange={handleCityChange}
-//             isDisabled={!selectedState}
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//         </div>
-
-//         {/* Published Since Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Published Since
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["24h", "7 days", "30 days"].map((time) => (
-//               <div key={time}>
-//                 <input
-//                   type="radio"
-//                   id={time}
-//                   value={time}
-//                   checked={publishedSince === time}
-//                   onChange={(e) => setPublishedSince(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={time}>{time}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Apply Filters Button */}
-//         <Button
-//           onClick={handleApplyFilters}
-//           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-//         >
-//           Apply Filters
-//         </Button>
-//       </CardBody>
-//     </Card>
-//   );
-// };
-
-// export default FilterCard;
-
-//v4 - should work ok
-// import React, { useState, useContext } from "react";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Autocomplete,
-//   AutocompleteItem,
-//   Button,
-// } from "@nextui-org/react";
-// import { useFilterContext } from "@/context/FilterContext";
-// import { states, cities } from "../data/locations";
-
-// type Option = {
-//   value: string;
-//   label: string;
-// };
-
-// const FilterCard: React.FC = () => {
-//   const { setFilters } = useFilterContext();
-//   const [minPrice, setMinPrice] = useState<number | null>(null);
-//   const [maxPrice, setMaxPrice] = useState<number | null>(null);
-//   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-//   const [selectedCondition, setSelectedCondition] = useState<string>("");
-//   const [selectedState, setSelectedState] = useState<Option | null>(null);
-//   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
-//   const [publishedSince, setPublishedSince] = useState<string>("");
-
-//   const handleStateChange = (key: React.Key) => {
-//     const state = states.find((state: Option) => state.value === key);
-//     setSelectedState(state || null);
-//     setSelectedCity(null); // Reset city selection when state changes
-//   };
-
-//   const handleCityChange = (key: React.Key) => {
-//     if (selectedState) {
-//       const city = cities[selectedState.value].find(
-//         (city: Option) => city.value === key
-//       );
-//       setSelectedCity(city || null);
-//     }
-//   };
-
-//   const handleCategoryChange = (category: string) => {
-//     setSelectedCategories((prevCategories) =>
-//       prevCategories.includes(category)
-//         ? prevCategories.filter((cat) => cat !== category)
-//         : [...prevCategories, category]
-//     );
-//   };
-
-//   const handleApplyFilters = () => {
-//     const filters = {
-//       minPrice,
-//       maxPrice,
-//       categories: selectedCategories,
-//       condition: selectedCondition,
-//       state: selectedState?.value || "",
-//       city: selectedCity?.value || "",
-//       publishedSince,
-//     };
-
-//     setFilters(filters);
-
-//     // Optionally make an API call here if you want to fetch filtered data immediately
-//   };
-
-//   return (
-//     <Card className="p-6 bg-white rounded-lg shadow-md max-w-sm">
-//       <CardHeader>
-//         <h4 className="text-lg font-semibold mb-4">Filter Products</h4>
-//       </CardHeader>
-//       <CardBody>
-//         {/* Price Range Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Price Range
-//           </label>
-//           <input
-//             placeholder="Min Price"
-//             type="number"
-//             value={minPrice !== null ? minPrice : ""}
-//             onChange={(e) =>
-//               setMinPrice(e.target.value ? parseFloat(e.target.value) : null)
-//             }
-//             className="block w-full border-gray-300 rounded-md mb-2"
-//           />
-//           <input
-//             placeholder="Max Price"
-//             type="number"
-//             value={maxPrice !== null ? maxPrice : ""}
-//             onChange={(e) =>
-//               setMaxPrice(e.target.value ? parseFloat(e.target.value) : null)
-//             }
-//             className="block w-full border-gray-300 rounded-md"
-//           />
-//         </div>
-
-//         {/* Category Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Category
-//           </label>
-//           {[
-//             "Helmets",
-//             "Leather Suits",
-//             "Gloves",
-//             "Boots",
-//             "Jackets",
-//             "Trousers",
-//             "Underwear",
-//             "Accessories",
-//             "Spare Parts",
-//           ].map((category) => (
-//             <div key={category} className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 id={category}
-//                 checked={selectedCategories.includes(category)}
-//                 onChange={() => handleCategoryChange(category)}
-//                 className="mr-2"
-//               />
-//               <label htmlFor={category}>{category}</label>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Condition Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Condition
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["New", "Like New", "Good Condition"].map((condition) => (
-//               <div key={condition}>
-//                 <input
-//                   type="radio"
-//                   id={condition}
-//                   value={condition}
-//                   checked={selectedCondition === condition}
-//                   onChange={(e) => setSelectedCondition(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={condition}>{condition}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Location Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Location
-//           </label>
-//           <Autocomplete
-//             label="State"
-//             defaultItems={states}
-//             placeholder="Search State"
-//             selectedKey={selectedState?.value}
-//             onSelectionChange={handleStateChange}
-//             className="mb-2"
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//           <Autocomplete
-//             label="City"
-//             defaultItems={selectedState ? cities[selectedState.value] : []}
-//             placeholder="Search City"
-//             selectedKey={selectedCity?.value}
-//             onSelectionChange={handleCityChange}
-//             isDisabled={!selectedState}
-//           >
-//             {(item: Option) => (
-//               <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-//             )}
-//           </Autocomplete>
-//         </div>
-
-//         {/* Published Since Filter */}
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-700 mb-1">
-//             Published Since
-//           </label>
-//           <div className="flex items-center space-x-2">
-//             {["24h", "7 days", "30 days"].map((time) => (
-//               <div key={time}>
-//                 <input
-//                   type="radio"
-//                   id={time}
-//                   value={time}
-//                   checked={publishedSince === time}
-//                   onChange={(e) => setPublishedSince(e.target.value)}
-//                   className="mr-2"
-//                 />
-//                 <label htmlFor={time}>{time}</label>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Apply Filters Button */}
-//         <Button
-//           onClick={handleApplyFilters}
-//           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-//         >
-//           Apply Filters
-//         </Button>
-//       </CardBody>
-//     </Card>
-//   );
-// };
-
-// export default FilterCard;
-
-//v4 plus | v5 - updated adfter wrap _app with filter provider
 import React, { useState } from "react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
   Autocomplete,
   AutocompleteItem,
   Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CheckboxGroup,
+  Slider,
 } from "@nextui-org/react";
 import { useFilterContext } from "@/context/FilterContext";
 import { states, cities } from "@/data/locations";
+import CustomCheckbox from "@/components/custom-checkbox";
+import CustomRadioGroup from "@/components/custom-radio-group";
 
 type Option = {
   value: string;
   label: string;
 };
 
+const categories = [
+  "Cascos",
+  "Monos",
+  "Guantes",
+  "Botas",
+  "Chaquetas",
+  "Pantalones",
+  "Accessorios",
+  "Ropa interior",
+  "Recambios",
+];
+
+const conditions: Option[] = [
+  { value: "new", label: "Nuevo" },
+  { value: "like new", label: "Como nuevo" },
+  { value: "good", label: "Bueno" },
+];
+
+const dateRanges: Option[] = [
+  { value: "1", label: "1 día" },
+  { value: "7", label: "7 días" },
+  { value: "30", label: "30 días" },
+];
+
 const FilterCard: React.FC = () => {
   const { setFilters } = useFilterContext();
-  const [minPrice, setMinPrice] = useState<number | null>(null);
-  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(800);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCondition, setSelectedCondition] = useState<string>("");
   const [selectedState, setSelectedState] = useState<Option | null>(null);
@@ -882,14 +68,6 @@ const FilterCard: React.FC = () => {
     }
   };
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((cat) => cat !== category)
-        : [...prevCategories, category]
-    );
-  };
-
   const handleApplyFilters = () => {
     const filters = {
       minPrice,
@@ -906,98 +84,117 @@ const FilterCard: React.FC = () => {
     // Optionally make an API call here if you want to fetch filtered data immediately
   };
 
+  const handleSliderChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setMinPrice(value[0]);
+      setMaxPrice(value[1]);
+    }
+  };
+
   return (
-    <Card
-      isBlurred
-      className="p-6 max-w-sm"
-      shadow="sm"
-    >
-      {/* <Card className="p-6 max-w-sm" isBlurred> */}
-      {/* <Card className="p-6 bg-white rounded-lg shadow-md max-w-sm"> */}
+    <Card className="p-4 max-w-sm" shadow="sm">
       <CardHeader>
-        <h4 className="text-lg font-semibold">Filter Products</h4>
+        <h4 className="text-lg font-semibold">Filtros</h4>
       </CardHeader>
       <CardBody>
         {/* Price Range Filter */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Price Range
+          <label className="block text-sm font-medium text-default-700 mb-2">
+            Rango de precio
           </label>
-          <input
-            placeholder="Min Price"
-            type="number"
-            value={minPrice !== null ? minPrice : ""}
-            onChange={(e) =>
-              setMinPrice(e.target.value ? parseFloat(e.target.value) : null)
-            }
-            className="block w-full border-gray-300 rounded-md mb-2"
-          />
-          <input
-            placeholder="Max Price"
-            type="number"
-            value={maxPrice !== null ? maxPrice : ""}
-            onChange={(e) =>
-              setMaxPrice(e.target.value ? parseFloat(e.target.value) : null)
-            }
-            className="block w-full border-gray-300 rounded-md"
+          <div className="flex justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              {minPrice} €
+            </span>
+            <span className="text-sm font-medium text-gray-700">
+              {maxPrice} €
+            </span>
+          </div>
+          <Slider
+            step={100}
+            maxValue={3000}
+            minValue={0}
+            value={[minPrice, maxPrice]}
+            onChange={handleSliderChange}
+            showTooltip={true}
+            showOutline={true}
+            disableThumbScale={true}
+            tooltipValueFormatOptions={{
+              style: "currency",
+              currency: "EUR",
+              maximumFractionDigits: 0,
+            }}
+            classNames={{
+              base: "max-w-md",
+              filler: "bg-gradient-to-r from-primary-500 to-secondary-400",
+              labelWrapper: "mb-2",
+              label: "font-medium text-default-700 text-medium",
+              value: "font-medium text-default-500 text-small",
+              thumb: [
+                "transition-size",
+                "bg-gradient-to-r from-secondary-400 to-primary-500",
+                "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
+                "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
+              ],
+              step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
+            }}
+            tooltipProps={{
+              offset: 10,
+              placement: "bottom",
+              classNames: {
+                base: [
+                  // arrow color
+                  "before:bg-gradient-to-r before:from-secondary-400 before:to-primary-500",
+                ],
+                content: [
+                  "py-2 shadow-xl",
+                  "text-white bg-gradient-to-r from-secondary-400 to-primary-500",
+                ],
+              },
+            }}
           />
         </div>
 
         {/* Category Filter */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Category
+          <label className="block text-sm font-medium text-default-700 mb-2">
+            Categoría
           </label>
-          {[
-            "Helmets",
-            "Leather Suits",
-            "Gloves",
-            "Boots",
-            "Jackets",
-            "Trousers",
-            "Underwear",
-            "Accessories",
-            "Spare Parts",
-          ].map((category) => (
-            <div key={category} className="flex items-center">
-              <input
-                type="checkbox"
-                id={category}
-                checked={selectedCategories.includes(category)}
-                onChange={() => handleCategoryChange(category)}
-                className="mr-2"
-              />
-              <label htmlFor={category}>{category}</label>
-            </div>
-          ))}
+          <div className="flex flex-col gap-1 w-full">
+            <CheckboxGroup
+              className="gap-1"
+              orientation="horizontal"
+              value={selectedCategories}
+              onValueChange={setSelectedCategories}
+            >
+              {categories.map((category) => (
+                <CustomCheckbox key={category} value={category}>
+                  {category}
+                </CustomCheckbox>
+              ))}
+            </CheckboxGroup>
+          </div>
         </div>
 
         {/* Condition Filter */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Condition
+          <label className="block text-sm font-medium text-default-700 mb-1">
+            Estado
           </label>
           <div className="flex items-center space-x-2">
-            {["New", "Like New", "Good Condition"].map((condition) => (
-              <div key={condition}>
-                <input
-                  type="radio"
-                  id={condition}
-                  value={condition}
-                  checked={selectedCondition === condition}
-                  onChange={(e) => setSelectedCondition(e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor={condition}>{condition}</label>
-              </div>
-            ))}
+            <CustomRadioGroup
+              className="flex flex-wrap gap-2 w-full"
+              options={conditions}
+              selectedValue={selectedCondition}
+              onChange={setSelectedCondition}
+            />
           </div>
         </div>
 
         {/* Location Filter */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Location
+          <label className="block text-sm font-medium text-default-700 mb-1">
+            Ubicación
           </label>
           <Autocomplete
             label="State"
@@ -1027,23 +224,16 @@ const FilterCard: React.FC = () => {
 
         {/* Published Since Filter */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Published Since
+          <label className="block text-sm font-medium text-default-700 mb-1">
+            Publicado hace
           </label>
           <div className="flex items-center space-x-2">
-            {["24h", "7 days", "30 days"].map((time) => (
-              <div key={time}>
-                <input
-                  type="radio"
-                  id={time}
-                  value={time}
-                  checked={publishedSince === time}
-                  onChange={(e) => setPublishedSince(e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor={time}>{time}</label>
-              </div>
-            ))}
+            <CustomRadioGroup
+              className="flex flex-wrap gap-2 w-full"
+              options={dateRanges}
+              selectedValue={publishedSince}
+              onChange={setPublishedSince}
+            />
           </div>
         </div>
 
@@ -1051,8 +241,9 @@ const FilterCard: React.FC = () => {
         <Button
           onClick={handleApplyFilters}
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+          // className="w-full bg-gradient-to-r from-primary-500 to-secondary-400 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
         >
-          Apply Filters
+          Aplicar filtros
         </Button>
       </CardBody>
     </Card>
