@@ -15,3 +15,8 @@ export interface Product {
   description: string;
   images: string[];
 }
+
+export interface Option {
+  value: string;
+  label: string;
+}
