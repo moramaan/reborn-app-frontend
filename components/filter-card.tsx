@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -45,10 +45,16 @@ const dateRanges: Option[] = [
 
 interface FilterCardProps {
   maxValue: number;
+  isModal: boolean;
+  setIsFilterOpen: (isOpen: boolean) => void;
 }
 
-const FilterCard: React.FC<FilterCardProps> = ({ maxValue }) => {
-  const { setFilters } = useFilterContext();
+const FilterCard: React.FC<FilterCardProps> = ({
+  maxValue,
+  isModal,
+  setIsFilterOpen,
+}) => {
+  const { filters, setFilters } = useFilterContext();
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(maxValue);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -73,7 +79,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ maxValue }) => {
   };
 
   const handleApplyFilters = () => {
-    const filters = {
+    const localFilters = {
       minPrice,
       maxPrice,
       categories: selectedCategories,
@@ -83,7 +89,10 @@ const FilterCard: React.FC<FilterCardProps> = ({ maxValue }) => {
       publishedSince,
     };
 
-    setFilters(filters);
+    setFilters(localFilters);
+
+    // Close the filter card after applying filters only if isModal is true
+    isModal && setIsFilterOpen(false);
 
     // Optionally make an API call here if you want to fetch filtered data immediately
   };
@@ -94,6 +103,30 @@ const FilterCard: React.FC<FilterCardProps> = ({ maxValue }) => {
       setMaxPrice(value[1]);
     }
   };
+
+  useEffect(() => {
+    setMinPrice(filters.minPrice || 0);
+    setMaxPrice(
+      filters.maxPrice !== null
+        ? maxValue < filters.maxPrice
+          ? maxValue
+          : filters.maxPrice
+        : maxValue
+    );
+    setSelectedCategories(filters.categories);
+    setSelectedCondition(filters.condition);
+    setSelectedState(
+      // filters.state ? states.find((state) => state.value === filters.state) : null
+      filters.state ? "" || null : null
+    );
+    setSelectedCity(
+      // filters.city
+      //   ? cities[filters.state].find((city) => city.value === filters.city)
+      //   : null
+      filters.city ? "" || null : null
+    );
+    setPublishedSince(filters.publishedSince);
+  }, [filters]);
 
   return (
     <Card className="p-4 max-w-sm" shadow="sm">

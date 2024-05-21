@@ -16,8 +16,8 @@ interface FilterContextProps {
 }
 
 const defaultFilters: Filters = {
-  minPrice: null,
-  maxPrice: null,
+  minPrice: 0,
+  maxPrice: 9999999999,
   categories: [],
   condition: "",
   state: "",
