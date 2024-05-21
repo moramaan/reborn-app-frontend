@@ -169,11 +169,12 @@ function findMaxValue(products: Product[]) {
   return maxValue;
 }
 
-export default function HelpFeedbackPage() {
+export default function SearchPage() {
   const { products, setProducts } = useProductContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [maxValue, setMaxValue] = useState<number>(1000);
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -215,10 +216,31 @@ export default function HelpFeedbackPage() {
       </section>
       <section className="flex flex-col items-center justify-center py-4">
         <div className="grid grid-cols-12 gap-5 max-w-[1400px] w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
-          <div className="col-span-3 h-full">
+          <div className="lg:col-span-3 h-full hidden lg:block">
             <FilterCard maxValue={maxValue} />
           </div>
-          <div className="col-span-9 h-full">
+          <div className="col-span-12 lg:col-span-9 h-full">
+            <div className="flex justify-end mb-4 lg:hidden">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={() => setIsFilterOpen(true)}
+              >
+                Show Filters
+              </button>
+            </div>
+            {isFilterOpen && (
+              <div className="z-50 fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center lg:hidden">
+                <div className="relative">
+                  <FilterCard maxValue={maxValue} />
+                  <button
+                    className="absolute top-5 right-5 z-10 bg-red-500 text-white px-4 py-2 rounded mb-4"
+                    onClick={() => setIsFilterOpen(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {products.map((data) => (
                 <ProductCard key={data.id} {...data} />
