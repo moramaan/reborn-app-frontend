@@ -115,16 +115,21 @@ const FilterCard: React.FC<FilterCardProps> = ({
     );
     setSelectedCategories(filters.categories);
     setSelectedCondition(filters.condition);
-    setSelectedState(
-      // filters.state ? states.find((state) => state.value === filters.state) : null
-      filters.state ? "" || null : null
-    );
-    setSelectedCity(
-      // filters.city
-      //   ? cities[filters.state].find((city) => city.value === filters.city)
-      //   : null
-      filters.city ? "" || null : null
-    );
+    //TODO: Fix this (state and city selection not working properly)
+    let filterState: Option | null = null;
+    if (filters.state) {
+      const foundState = states.find((state) => state.value === filters.state);
+      filterState = foundState ? foundState : null;
+    }
+    setSelectedState(filterState);
+    let filterCity: Option | null = null;
+    if (filters.city) {
+      const foundCity = cities[filters.state].find(
+        (city) => city.value === filters.city
+      );
+      filterCity = foundCity ? foundCity : null;
+    }
+    setSelectedCity(filterCity);
     setPublishedSince(filters.publishedSince);
   }, [filters]);
 
