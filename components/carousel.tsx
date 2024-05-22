@@ -36,7 +36,7 @@ const Carousel: React.FC<CarouselProps> = ({ images: initialImages }) => {
   }, [initialImages]);
 
   return (
-    <div className="w-full sm:w-[400px] md:w-[500px] relative mx-auto">
+    <div className="w-full sm:w-[400px] md:w-[574px] lg:w-[500px] relative mx-auto">
       <Card className="max-w-[600px] h-[200px] md:h-[300px] lg:h-[400px] mx-auto">
         <Swipe
           onSwipeLeft={nextImage}

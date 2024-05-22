@@ -55,7 +55,9 @@ export const Navbar = () => {
             <RebornLogo Width={150} Height={200}></RebornLogo>
           </NextLink>
         </NavbarBrand>
-        <NavbarItem className="hidden lg:flex basis-4/6" >{searchInput}</NavbarItem>
+        <NavbarItem className="hidden lg:flex basis-4/6">
+          {searchInput}
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent
@@ -96,19 +98,22 @@ export const Navbar = () => {
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-                }
+              <NextLink
+                className={clsx(
+                  linkStyles({
+                    color:
+                      index === 2
+                        ? "primary"
+                        : index === siteConfig.navMenuItems.length - 1
+                        ? "danger"
+                        : "foreground",
+                  }),
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                )}
                 href={item.href}
-                size="lg"
               >
                 {item.label}
-              </Link>
+              </NextLink>
             </NavbarMenuItem>
           ))}
         </div>

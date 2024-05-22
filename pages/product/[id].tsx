@@ -46,7 +46,7 @@ export default function ProductPage() {
       <section className="flex flex-col items-center justify-center py-4">
         <div className="max-w-5xl w-full text-center items-center justify-between font-mono text-sm sm:mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Carousel images={product.images} />
-          <div className="max-w-xl w-full">
+          <div className="max-w-xl w-full justify-self-center">
             <ProductSellerCard />
             <ProductInfo
               price={product.price}
