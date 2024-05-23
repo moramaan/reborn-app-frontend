@@ -21,6 +21,7 @@ import { SearchIcon } from "@/components/icons";
 
 import RebornLogo from "@/components/reborn-logo";
 import { SearchButton } from "@/components/search-button";
+import UserProfileModal from "@/components/user-profile-modal";
 
 export const Navbar = () => {
   const searchInput = (
@@ -46,6 +47,15 @@ export const Navbar = () => {
       type="search"
     />
   );
+
+  // test user data - remove when auth is implemented
+  const user = {
+    email: "user@example.com",
+    name: "John Doe",
+    lastName: "Smith",
+    phone: "123-456-7890",
+    showPhone: false,
+  };
 
   return (
     <NextUINavbar maxWidth="full" position="sticky">
@@ -83,8 +93,12 @@ export const Navbar = () => {
             </NavbarItem>
           ))}
         </div>
+        {/* TODO: add conditional render for login or show avatar */}
         <NavbarItem className="hidden md:flex">
           <Link href="#">Iniciar Sesión</Link>
+        </NavbarItem>
+        <NavbarItem>
+          <UserProfileModal user={user}/>
         </NavbarItem>
       </NavbarContent>
 
