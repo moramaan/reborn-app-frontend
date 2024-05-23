@@ -11,7 +11,7 @@ export default function SearchLayout({
 		<div className="relative flex flex-col h-screen">
 			<Head />
 			<Navbar />
-			<main className="container w-full px-6 flex-grow">
+			<main className="container w-full px-6 flex-grow self-center">
 				{children}
 			</main>
 			<footer className="w-full flex items-center justify-center py-3">

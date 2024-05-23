@@ -3,6 +3,7 @@ import DefaultLayout from "@/layouts/default";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useProductContext } from "@/context/ProductContext";
+import IndexLayout from "@/layouts/index";
 
 // dynamic import with SSR disabled due to hydration error
 const ProductCard = dynamic(() => import("@/components/product-card"), {
@@ -93,12 +94,7 @@ export default function IndexPage() {
   }
 
   return (
-    <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-4 md:py-8">
-        <div className="inline-block max-w-2xl text-center justify-center">
-          <h2 className={title({ color: "green" })}>DAW Proyecto Final</h2>
-        </div>
-      </section>
+    <IndexLayout>
       <section className="flex flex-col items-center justify-center py-2">
         <div className="max-w-5xl w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
           <h4 className={`w-full text-start ${title({ color: "yellow" })}`}>
@@ -123,7 +119,7 @@ export default function IndexPage() {
           </div>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center py-2">
+      <section className="flex flex-col items-center justify-center py-2 mb-8">
         <div className="max-w-5xl w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
           <h4 className={`w-full text-start ${title({ color: "yellow" })}`}>
             Con más me gusta
@@ -135,6 +131,6 @@ export default function IndexPage() {
           </div>
         </div>
       </section>
-    </DefaultLayout>
+    </IndexLayout>
   );
 }
