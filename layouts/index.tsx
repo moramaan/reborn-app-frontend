@@ -22,7 +22,7 @@ export default function IndexLayout({
           src="/index-hero.png"
         />
       </div>
-      <main className="container max-w-7xl px-6 flex-grow self-center">
+      <main className="container w-full max-w-7xl md:mt-4 px-6 flex-grow self-center">
         {children}
       </main>
       <Footer />
