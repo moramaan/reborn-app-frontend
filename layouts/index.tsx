@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/navbar";
-import { Link } from "@nextui-org/link";
 import { Head } from "./head";
 import { Image } from "@nextui-org/react";
 import Footer from "@/components/footer";

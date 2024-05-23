@@ -4,7 +4,7 @@ import { Image } from "@nextui-org/image";
 const Footer: React.FC = () => {
   return (
     <footer
-      className="w-full flex justify-center md:px-3 md:pe-6 mt-7 h-fit flex-grow"
+      className="w-full flex justify-center md:px-3 md:pe-6 mt-7 h-fit lg:max-h-[200px] flex-grow"
       style={{ backgroundImage: "url(/footerBg.JPG)" }}
     >
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-fit md:w-full h-fit mb-3 md:mb-0">
