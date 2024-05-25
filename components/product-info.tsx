@@ -6,7 +6,7 @@ interface ProductInfoProps {
   price: number;
   location: string;
   published: string;
-  state: string;
+  condition: string;
   description: string;
 }
 
@@ -17,7 +17,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   price = 500,
   location = "Barcelona, Cataluña",
   published = "2 días",
-  state = "Nuevo",
+  condition = "Nuevo",
   description = "",
 }) => {
   return (
@@ -31,8 +31,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
               <span className="pt-1">{location}</span>
             </div>
           </div>
-          <p className="text-sm text-default-600">Publicado hace {published}</p>
-          <p className="text-sm text-default-700">{state}</p>
+          <p className="text-sm text-default-600">Publicado {published == '0' ? 'hoy' : `hace ${published}`}</p>
+          <p className="text-sm text-default-700">{condition}</p>
         </div>
       </CardHeader>
       <CardBody>

@@ -12,25 +12,32 @@ export default function ProductPage() {
   const { id } = router.query;
   const { selectedProduct, products } = useProductContext();
   const [product, setProduct] = useState(selectedProduct);
+  const [daysSincePublish, setDaysSincePublish] = useState("");
 
   useEffect(() => {
-    // Get product ID from URL path to avoid the direct requests and fix refresh page issue
     let pathId = window.location.pathname.split("/")[2];
     if (!product) {
-      // Retrieve product data from local storage upon page reload
       const storedProduct = localStorage.getItem("selectedProduct");
       if (storedProduct) {
         let jsonStoredProduct = JSON.parse(storedProduct);
-        // Redirect to home page if no product ID in context and the stored product is not the same of the path
         if (!id && pathId !== jsonStoredProduct.id) {
           router.push("/");
         }
         setProduct(jsonStoredProduct);
+
+        // Calculate days since publishDate
+        const publishDate = new Date(jsonStoredProduct.publishDate);
+        const currentDate = new Date();
+        const differenceInTime = currentDate.getTime() - publishDate.getTime();
+        const differenceInDays = Math.floor(
+          differenceInTime / (1000 * 3600 * 24)
+        );
+        setDaysSincePublish(`${differenceInDays == 0 ? '0' : differenceInDays.toString() + " días"}`);
       }
     }
   }, []);
 
-  if (!product) {
+  if (!product || daysSincePublish === null) {
     return <div>Loading...</div>;
   }
 
@@ -51,8 +58,8 @@ export default function ProductPage() {
             <ProductInfo
               price={product.price}
               location={product.location}
-              published={product.published}
-              state={product.state}
+              published={daysSincePublish}
+              condition={product.condition}
               description={product.description}
             />
           </div>

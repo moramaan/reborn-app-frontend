@@ -15,12 +15,14 @@ interface UserContactDataProps {
   userName?: string;
   userPhone?: string;
   userEmail?: string;
+  showPhone?: boolean;
 }
-
+//TODO: format incoming phone number (add +34 and spaces)
 const UserContactData: React.FC<UserContactDataProps> = ({
   userName = "Zoey Lang",
   userPhone = "+34 666 70 60 70",
   userEmail = "zoey@gmail.es",
+  showPhone = true,
 }) => {
   return (
     <Popover backdrop="blur" placement="bottom-end" showArrow offset={10}>
@@ -47,16 +49,18 @@ const UserContactData: React.FC<UserContactDataProps> = ({
                   <span className="ml-3 truncate">{userName}</span>
                 </div>
                 <Divider />
-                <div className="flex items-center my-2">
-                  <MessageIcon />
-                  <a
-                    href={`tel:${userPhone}`}
-                    className="ml-3 truncate text-blue-500 hover:underline"
-                  >
-                    {userPhone}
-                  </a>
-                </div>
-                <Divider />
+                {showPhone && (
+                  <div className="flex items-center my-2">
+                    <MessageIcon />
+                    <a
+                      href={`tel:${userPhone}`}
+                      className="ml-3 truncate text-blue-500 hover:underline"
+                    >
+                      {userPhone}
+                    </a>
+                  </div>
+                )}
+                {showPhone && (<Divider />)}
                 <div className="flex items-center mt-2">
                   <MailIcon />
                   <a

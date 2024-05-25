@@ -28,7 +28,7 @@ const ProductCard: React.FC<Product> = ({ ...data }) => {
           width="100%"
           alt={data.title}
           className="w-full object-cover h-[200px] relative z-0"
-          src={data.img}
+          src={data.images[0] ?? ""} //TODO: get a default image
         />
         <Button
           isIconOnly

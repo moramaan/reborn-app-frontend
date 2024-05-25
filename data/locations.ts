@@ -1,7 +1,4 @@
-export type Option = {
-  value: string;
-  label: string;
-};
+import { Option } from "@/types";
 
 export const states: Option[] = [
   { value: "andalucia", label: "Andalucía" },
