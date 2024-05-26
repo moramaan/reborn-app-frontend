@@ -9,8 +9,8 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Categorías",
-      href: "/",
+      label: "Subir Producto",
+      href: "/upload-product",
     },
     {
       label: "Search-test",
@@ -27,12 +27,8 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Perfil",
-      href: "/",
-    },
-    {
-      label: "Panel de control",
-      href: "/",
+      label: "Subir Producto",
+      href: "/upload-product",
     },
     {
       label: "Search-test",
