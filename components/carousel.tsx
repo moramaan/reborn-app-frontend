@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Image, Button } from "@nextui-org/react";
+import { Card, Button } from "@nextui-org/react";
 import { LeftArrow, RightArrow } from "./icons";
 import Swipe from "react-easy-swipe";
 
@@ -14,7 +14,9 @@ const defaultImages: string[] = [
 ];
 
 const Carousel: React.FC<CarouselProps> = ({ images: initialImages }) => {
-  const [images, setImages] = useState<string[]>(initialImages.length > 0 ? initialImages : defaultImages);
+  const [images, setImages] = useState<string[]>(
+    initialImages.length > 0 ? initialImages : defaultImages
+  );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const nextImage = () => {
@@ -35,6 +37,21 @@ const Carousel: React.FC<CarouselProps> = ({ images: initialImages }) => {
     }
   }, [initialImages]);
 
+  // Preload next and previous images
+  useEffect(() => {
+    const preloadImages = (index: number) => {
+      const nextIndex = (index + 1) % images.length;
+      const prevIndex = index === 0 ? images.length - 1 : index - 1;
+      const preload = (src: string) => {
+        const img = new Image();
+        img.src = src;
+      };
+      preload(images[nextIndex]);
+      preload(images[prevIndex]);
+    };
+    preloadImages(currentIndex);
+  }, [currentIndex, images]);
+
   return (
     <div className="w-full sm:w-[400px] md:w-[574px] lg:w-[500px] relative mx-auto">
       <Card className="max-w-[600px] h-[200px] md:h-[300px] lg:h-[400px] mx-auto">
@@ -43,8 +60,7 @@ const Carousel: React.FC<CarouselProps> = ({ images: initialImages }) => {
           onSwipeRight={prevImage}
           className="relative z-10 w-full h-full"
         >
-          <Image
-            removeWrapper
+          <img
             alt="Card background"
             className="z-0 w-full h-full object-cover"
             src={images[currentIndex]}
