@@ -20,7 +20,7 @@ const jsonData = [
     price: 500,
     location: "Barcelona, Cataluña",
     state: "available",
-    condition: "Nuevo",
+    condition: 1,
     publishDate: new Date(),
     images: [
       "https://nextui.org/images/card-example-4.jpeg",
@@ -38,7 +38,7 @@ const jsonData = [
     price: 500,
     location: "Barcelona, Cataluña",
     state: "available",
-    condition: "Nuevo",
+    condition: 1,
     publishDate: new Date(),
     images: [
       "https://nextui.org/images/card-example-3.jpeg",
@@ -56,7 +56,7 @@ const jsonData = [
     price: 500,
     location: "Barcelona, Cataluña",
     state: "available",
-    condition: "Nuevo",
+    condition: 1,
     publishDate: new Date(),
     images: [
       "https://nextui.org/images/card-example-2.jpeg",
@@ -74,7 +74,7 @@ const jsonData = [
     price: 500,
     location: "Barcelona, Cataluña",
     state: "available",
-    condition: "Nuevo",
+    condition: 1,
     publishDate: new Date(),
     images: [
       "https://nextui.org/images/album-cover.png",
@@ -84,8 +84,6 @@ const jsonData = [
     ],
   },
 ];
-
-// let userFetched = {} as any;
 
 export default function IndexPage() {
   const { products, setProducts } = useProductContext();
