@@ -1,16 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-
-interface Product {
-  id: string;
-  title: string;
-  img: string;
-  price: number;
-  location: string;
-  published: string;
-  state: string;
-  description: string;
-  images: string[];
-}
+import { Product } from "@/types";
 
 interface ProductContextProps {
   products: Product[];

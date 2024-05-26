@@ -31,7 +31,7 @@ export interface Product {
   price: number;
   location: string;
   state: string; // available, reserved, sold
-  condition: string; // new, used, as new | comes as 0, 1 or 2 in this order
+  condition: number; // new, used, as new | comes as 0, 1 or 2 in this order
   publishDate: Date;
   images: string[];
 }

@@ -14,7 +14,7 @@ export const Head = () => {
 				content="viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 				name="viewport"
 			/>
-			<link href="/test-faviconBlack.png" rel="icon" />
+			<link href="/newFaviconWhite.png" rel="icon" />
 		</NextHead>
 	);
 };

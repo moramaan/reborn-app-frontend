@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -12,18 +12,31 @@ import {
 import { MailIcon, PersonIcon, MessageIcon } from "@/components/icons";
 
 interface UserContactDataProps {
-  userName?: string;
-  userPhone?: string;
-  userEmail?: string;
-  showPhone?: boolean;
+  name: string;
+  phone: string;
+  email: string;
+  showPhone: boolean;
 }
 //TODO: format incoming phone number (add +34 and spaces)
-const UserContactData: React.FC<UserContactDataProps> = ({
-  userName = "Zoey Lang",
-  userPhone = "+34 666 70 60 70",
-  userEmail = "zoey@gmail.es",
-  showPhone = true,
-}) => {
+export default function UserContactData({
+  name,
+  phone,
+  email,
+  showPhone,
+}: UserContactDataProps) {
+  const [formattedPhone, setFormattedPhone] = useState<string>("");
+
+  //format phone number
+  useEffect(() => {
+    if (!phone.includes("+") && phone.length === 9) {
+      const formattedPhone =
+        "+34 " + phone.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4");
+      setFormattedPhone(formattedPhone);
+    } else {
+      setFormattedPhone(phone);
+    }
+  }, [phone]);
+
   return (
     <Popover backdrop="blur" placement="bottom-end" showArrow offset={10}>
       <PopoverTrigger>
@@ -46,28 +59,28 @@ const UserContactData: React.FC<UserContactDataProps> = ({
               <CardBody>
                 <div className="flex items-center mb-2">
                   <PersonIcon />
-                  <span className="ml-3 truncate">{userName}</span>
+                  <span className="ml-3 truncate">{name}</span>
                 </div>
                 <Divider />
                 {showPhone && (
                   <div className="flex items-center my-2">
                     <MessageIcon />
                     <a
-                      href={`tel:${userPhone}`}
+                      href={`tel:${formattedPhone}`}
                       className="ml-3 truncate text-blue-500 hover:underline"
                     >
-                      {userPhone}
+                      {formattedPhone}
                     </a>
                   </div>
                 )}
-                {showPhone && (<Divider />)}
+                {showPhone && <Divider />}
                 <div className="flex items-center mt-2">
                   <MailIcon />
                   <a
-                    href={`mailto:${userEmail}`}
+                    href={`mailto:${email}`}
                     className="ml-3 truncate text-blue-500 hover:underline"
                   >
-                    {userEmail}
+                    {email}
                   </a>
                 </div>
               </CardBody>
@@ -77,6 +90,4 @@ const UserContactData: React.FC<UserContactDataProps> = ({
       </PopoverContent>
     </Popover>
   );
-};
-
-export default UserContactData;
+}

@@ -13,225 +13,6 @@ const ProductCard = dynamic(() => import("@/components/product-card"), {
   ssr: false,
 });
 
-const jsonData = [
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-2.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-3.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-2.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-3.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-2.jpeg",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-  {
-    id: uuidv4(),
-    userId: 1,
-    title: "Curso de Next.js",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed etiam, ut quaeritis, si longius, si prensius. Quae cum dixisset paulumque institisset, Quid est? Quod quidem nobis non saepe contingit. Duo Reges: constructio interrete. Quae cum essent dicta, finem fecimus et ambulandi et disputandi.",
-    price: 500,
-    location: "Barcelona, Cataluña",
-    state: "available",
-    condition: "Nuevo",
-    publishDate: new Date(),
-    images: [
-      "https://nextui.org/images/card-example-3.jpeg",
-      "https://nextui.org/images/album-cover.png",
-      "https://nextui.org/images/card-example-4.jpeg",
-      "https://nextui.org/images/card-example-2.jpeg",
-    ],
-  },
-];
-
 //function to find the higher price
 function findMaxValue(products: Product[]) {
   let maxValue = 0;
@@ -251,14 +32,20 @@ export default function SearchPage() {
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const { filters } = useFilterContext();
 
+  //first fetch of products
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
   const fetchProductData = async () => {
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       //TODO: FETCH FILTERED PRODUCTS
-      // const response = await fetch("/api/products");
-      // if (!response.ok) {
-      //   throw new Error("Failed to fetch product data");
-      // }
-      // const jsonData = await response.json();
+      const response = await fetch(`${apiUrl}/items`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch product data");
+      }
+      const jsonData = await response.json();
       setProducts(jsonData); //TODO change the assignment with fetched products
       setMaxValue(findMaxValue(jsonData));
       setLoading(false);
