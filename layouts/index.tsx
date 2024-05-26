@@ -18,7 +18,7 @@ export default function IndexLayout({
           radius="none"
           width="100%"
           alt="Reborn index hero image"
-          src="/index-hero.png"
+          src="/banner2kv2.png"
         />
       </div>
       <main className="container w-full max-w-7xl md:mt-4 px-6 flex-grow self-center">

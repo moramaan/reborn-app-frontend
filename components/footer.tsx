@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer
       className="w-full flex justify-center md:px-3 md:pe-6 mt-7 h-fit lg:max-h-[200px] flex-grow"
-      style={{ backgroundImage: "url(/footerBg.JPG)" }}
+      style={{ backgroundImage: "url(/footer2k.png)" }}
     >
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-fit md:w-full h-fit mb-3 md:mb-0">
         <div className="md:w-fit flex flex-col text-white md:mb-6">
@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
             radius="none"
             width="100"
             alt="Reborn index hero image"
-            src="/test-faviconWhite.png"
+            src="/smallLogoWhite.png"
           />
           <div className="ps-4">
             <p>Aviso Legal</p>
