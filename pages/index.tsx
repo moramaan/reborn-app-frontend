@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useProductContext } from "@/context/ProductContext";
 import IndexLayout from "@/layouts/index";
 const { v4: uuidv4 } = require("uuid");
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 // dynamic import with SSR disabled due to hydration error
 const ProductCard = dynamic(() => import("@/components/product-card"), {
@@ -86,9 +87,10 @@ const jsonData = [
 ];
 
 export default function IndexPage() {
+  const { user, error, isLoading } = useUser(); //auth0
   const { products, setProducts } = useProductContext();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [errors, setErrors] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -102,7 +104,7 @@ export default function IndexPage() {
       //   userFetched = await response.json();
       //   console.log(JSON.stringify(userFetched));
       // } catch (error: any) {
-      //   setError(error as Error);
+      //   seterrors(error as Error);
       // }
     };
 
@@ -114,13 +116,13 @@ export default function IndexPage() {
       try {
         // const response = await fetch("/api/products");
         // if (!response.ok) {
-        //   throw new Error("Failed to fetch product data");
+        //   throw new error("Failed to fetch product data");
         // }
         // const jsonData = await response.json();
         setProducts(jsonData);
         setLoading(false);
       } catch (error: any) {
-        setError(error as Error);
+        setErrors(error as Error);
         setLoading(false);
       }
     };
@@ -132,8 +134,8 @@ export default function IndexPage() {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (errors) {
+    return <div>Error: {errors.message}</div>;
   }
 
   return (

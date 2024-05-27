@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   Modal,
@@ -10,34 +10,91 @@ import {
   useDisclosure,
   Input,
   Switch,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
+import { Option } from "@/types";
+import { states, cities } from "@/data/locations";
+import { User } from "@/types/index";
 
 interface UserProfileModalProps {
-  user: {
-    email: string;
-    name: string;
-    lastName: string;
-    phone: string;
-    showPhone: boolean;
-  };
+  user: User | null;
+  picture: string | null | undefined;
+  updateUser: (user: User) => void;
 }
 
-const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
+const UserProfileModal: React.FC<UserProfileModalProps> = ({
+  user,
+  picture,
+  updateUser,
+}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedState, setSelectedState] = useState<Option | null>(null);
+  const [selectedCity, setSelectedCity] = useState<Option | null>(null);
   const [formData, setFormData] = useState({
-    email: user.email,
-    name: user.name,
-    lastName: user.lastName,
-    phone: user.phone,
-    showPhone: user.showPhone,
+    email: user?.email || "",
+    name: user?.name || "",
+    lastName: user?.lastName || "",
+    phone: user?.phone || "",
+    showPhone: user?.showPhone || false,
+    state: user?.state || "",
+    city: user?.city || "",
   });
-
   const [formErrors, setFormErrors] = useState({
     name: false,
     lastName: false,
     phone: false,
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        email: user.email,
+        name: user.name,
+        lastName: user.lastName,
+        phone: user.phone,
+        showPhone: user.showPhone,
+        state: user.state,
+        city: user.city,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setSelectedState(
+        states.find((state) => state.value === user.state) || null
+      );
+      setSelectedCity(
+        cities[user.state]?.find((city) => city.value === user.city) || null
+      );
+    }
+  }, [user]);
+
+  const handleStateChange = (key: React.Key) => {
+    const state = states.find((state: Option) => state.value === key);
+    setSelectedState(state || null);
+    setSelectedCity(null); // Reset city selection when state changes
+    setFormData({
+      ...formData,
+      state: state?.value || "",
+      city: "",
+    });
+  };
+
+  const handleCityChange = (key: React.Key) => {
+    if (selectedState) {
+      const city = cities[selectedState.value].find(
+        (city: Option) => city.value === key
+      );
+      setSelectedCity(city || null);
+      setFormData({
+        ...formData,
+        city: city?.value || "",
+      });
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -55,7 +112,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
   };
 
   const validateInput = (name: string, value: string) => {
-    const numPattern = /^[0-9]{6}$/;
+    const numPattern = /^[0-9]{9}$/;
     const pattern =
       /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ0-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚüÜñÑ0-9]+)*$/;
     return name === "phone" ? numPattern.test(value) : pattern.test(value);
@@ -65,7 +122,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     const isNameValid = validateInput("name", formData.name);
     const isLastNameValid = validateInput("name", formData.lastName);
     const isPhoneValid = validateInput("phone", formData.phone);
@@ -77,25 +134,50 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
     });
 
     if (isNameValid && isLastNameValid && isPhoneValid) {
-      // TODO: Implement save logic here || => Save to context and/or API
-      setIsEditing(false);
-      user = {
-        ...user,
+      const updatedUser = {
+        ...user!,
         name: formData.name,
         lastName: formData.lastName,
         phone: formData.phone,
         showPhone: formData.showPhone,
+        state: formData.state,
+        city: formData.city,
       };
+      updateUser(updatedUser);
+      setIsEditing(false);
+      // fetch the api to update the user
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      try {
+        const response = await fetch(`${apiUrl}/users/${user?.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUser),
+        });
+        if (response.ok) {
+          console.log(
+            "User data saved successfully",
+            JSON.stringify(updatedUser)
+          );
+        } else {
+          console.error("Error saving user data");
+        }
+      } catch (error) {
+        console.error("Error saving user data", error);
+      }
     }
   };
 
   const handleCancelClick = () => {
     setFormData({
-      email: user.email,
-      name: user.name,
-      lastName: user.lastName,
-      phone: user.phone,
-      showPhone: user.showPhone,
+      email: user?.email || "",
+      name: user?.name || "",
+      lastName: user?.lastName || "",
+      phone: user?.phone || "",
+      showPhone: user?.showPhone || false,
+      state: user?.state || "",
+      city: user?.city || "",
     });
     setIsEditing(false);
     setFormErrors({
@@ -106,18 +188,14 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
   };
 
   const handleModalClose = (onClose: () => void) => {
-    isEditing && handleCancelClick();
-    // Close the modal
+    if (isEditing) handleCancelClick();
     onClose();
   };
 
   return (
     <>
       <Button isIconOnly onPress={onOpen} size="lg" radius="full">
-        <Avatar
-          isBordered
-          src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-        />
+        <Avatar name={user?.name || "None"} isBordered src={picture || ""} />
       </Button>
       <Modal
         isOpen={isOpen}
@@ -145,22 +223,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
                   label="Nombre"
                   name="name"
                   value={formData.name}
-                  onValueChange={(value) => {
-                    handleInputChange({
-                      target: { name: "name", value, type: "text" },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                    setFormErrors({
-                      ...formErrors,
-                      name: !validateInput("name", value),
-                    });
-                  }}
-                  //   onChange={(e) => {
-                  //     handleInputChange(e);
-                  //     setFormErrors({
-                  //       ...formErrors,
-                  //       name: !validateInput("name", e.target.value),
-                  //     });
-                  //   }}
+                  onChange={handleInputChange}
                   isInvalid={formErrors.name}
                   errorMessage={formErrors.name ? "Invalid name" : ""}
                   variant="bordered"
@@ -170,22 +233,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
                   label="Apellidos"
                   name="lastName"
                   value={formData.lastName}
-                  //   onChange={(e) => {
-                  //     handleInputChange(e);
-                  //     setFormErrors({
-                  //       ...formErrors,
-                  //       name: !validateInput("lastName", e.target.value),
-                  //     });
-                  //   }}
-                  onValueChange={(value) => {
-                    handleInputChange({
-                      target: { name: "lastName", value, type: "text" },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                    setFormErrors({
-                      ...formErrors,
-                      lastName: !validateInput("lastName", value),
-                    });
-                  }}
+                  onChange={handleInputChange}
                   isInvalid={formErrors.lastName}
                   errorMessage={formErrors.lastName ? "Invalid last name" : ""}
                   variant="bordered"
@@ -195,40 +243,60 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
                   label="Teléfono"
                   name="phone"
                   value={formData.phone}
-                  //   onChange={(e) => {
-                  //     handleInputChange(e);
-                  //     setFormErrors({
-                  //       ...formErrors,
-                  //       phone: !validateInput("phone", e.target.value),
-                  //     });
-                  //   }}
-                  onValueChange={(value) => {
-                    handleInputChange({
-                      target: { name: "phone", value, type: "text" },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                    setFormErrors({
-                      ...formErrors,
-                      phone: !validateInput("phone", value),
-                    });
-                  }}
+                  onChange={handleInputChange}
                   isInvalid={formErrors.phone}
                   errorMessage={formErrors.phone ? "Invalid phone number" : ""}
                   variant="bordered"
                   readOnly={!isEditing}
+                  isRequired={isEditing}
+                  isDisabled={!isEditing}
                 />
-                {isEditing && (
-                  <div className="flex flex-col gap-2 mt-4">
-                    <div className="flex justify-between items-center">
-                      <span>Show Phone</span>
-                      <Switch
-                        isSelected={formData.showPhone}
-                        onValueChange={(value) =>
-                          handleSwitchChange("showPhone", value)
-                        }
-                      />
-                    </div>
+                <Autocomplete
+                  label="State"
+                  defaultItems={states}
+                  placeholder="Search State"
+                  selectedKey={selectedState?.value}
+                  onSelectionChange={handleStateChange}
+                  variant="bordered"
+                  isRequired={isEditing}
+                  isDisabled={!isEditing}
+                >
+                  {(item: Option) => (
+                    <AutocompleteItem key={item.value}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
+                <Autocomplete
+                  label="City"
+                  defaultItems={
+                    selectedState ? cities[selectedState.value] : []
+                  }
+                  placeholder="Search City"
+                  selectedKey={selectedCity?.value}
+                  onSelectionChange={handleCityChange}
+                  isDisabled={!selectedState}
+                  variant="bordered"
+                  isRequired={isEditing}
+                >
+                  {(item: Option) => (
+                    <AutocompleteItem key={item.value}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex justify-between items-center">
+                    <span>Show Phone</span>
+                    <Switch
+                      isDisabled={!isEditing}
+                      isSelected={formData.showPhone}
+                      onValueChange={(value) =>
+                        handleSwitchChange("showPhone", value)
+                      }
+                    />
                   </div>
-                )}
+                </div>
               </ModalBody>
               <ModalFooter>
                 {isEditing ? (

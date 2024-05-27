@@ -1,32 +1,75 @@
-# Reborn App Concept
+# Reborn App Frontend
 
-This is a concept test of the DAW's final project. It is built with a template for creating applications using Next.js 13 (pages directory) and NextUI (v2).
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![NextUI](https://img.shields.io/badge/NextUI-EB5424?style=for-the-badge&logo=nextui&logoColor=white)
+
+## Overview
+
+Reborn App Frontend is the client-side application for a marketplace that gives motorist gear like jackets, helmets, and gloves a second chance. This platform allows users to buy, sell, and exchange motorist equipment, promoting sustainability and safety.
 
 ## Technologies Used
 
-- [Next.js 13](https://nextjs.org/docs/getting-started)
-- [NextUI](https://nextui.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+- **Next.js 13**: A powerful React framework for building fast and user-friendly web applications.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **NextUI**: A React UI library for creating beautiful and modern user interfaces.
 
-## How to Use
+## Features
 
-To create a new project based on this template using `create-next-app`, run the following command:
+- User Authentication and Authorization
+  - Integrated with Auth0 for secure login
+- Product Listings
+- Product searches by name and/or filters
+- Image Upload and Management
+- View seller contact data
+
+## Requirements
+
+- Node.js 18+
+- npm or yarn
+- Auth0 Account
+
+## Installation
+
+### Clone the Repository
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-pages-template
+git clone https://github.com/moramaan/reborn-app-frontend.git
+cd reborn-app-frontend
 ```
 
-To use all the base code as it is, clone or fork the repository and run the following command:
+### Install Dependencies
 
 ```bash
-npm install && npm run dev
+npm install
 ```
+
+### Environment Setup
+
+Copy the `.env.example` to `.env.local` and configure your environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+Set your Auth0 and other necessary configurations in the `.env.local` file.
+
+### Auth0 Setup
+
+Sign up on [Auth0](https://auth0.com) and follow their web tutorials to set up your own secrets. Ensure you have configured the necessary Auth0 settings in your `.env.local` file.
+
+### Run the Application
+
+```bash
+npm run dev
+```
+
+The frontend should now be running on `http://localhost:3000`.
+
+## Contributing
+
+Feel free to submit issues or pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-Licensed under the [MIT license](https://github.com/nextui-org/next-pages-template/blob/main/LICENSE).
-# reborn-app-frontend
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
