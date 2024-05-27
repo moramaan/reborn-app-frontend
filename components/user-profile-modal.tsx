@@ -147,25 +147,25 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
       setIsEditing(false);
       // fetch the api to update the user
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      // try {
-      //   const response = await fetch(`${apiUrl}/users/${user?.id}`, {
-      //     method: "PUT",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(updatedUser),
-      //   });
-      //   if (response.ok) {
-      //     console.log(
-      //       "User data saved successfully",
-      //       JSON.stringify(updatedUser)
-      //     );
-      //   } else {
-      //     console.error("Error saving user data");
-      //   }
-      // } catch (error) {
-      //   console.error("Error saving user data", error);
-      // }
+      try {
+        const response = await fetch(`${apiUrl}/users/${user?.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUser),
+        });
+        if (response.ok) {
+          console.log(
+            "User data saved successfully",
+            JSON.stringify(updatedUser)
+          );
+        } else {
+          console.error("Error saving user data");
+        }
+      } catch (error) {
+        console.error("Error saving user data", error);
+      }
     }
   };
 
