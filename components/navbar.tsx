@@ -1,5 +1,5 @@
 import {
-  Link,
+  Link as NextUILink,
   Input,
   Navbar as NextUINavbar,
   NavbarContent,
@@ -22,8 +22,14 @@ import { SearchIcon } from "@/components/icons";
 import RebornLogo from "@/components/reborn-logo";
 import { SearchButton } from "@/components/search-button";
 import UserProfileModal from "@/components/user-profile-modal";
+import { useEffect, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { User } from "@/types/index";
 
 export const Navbar = () => {
+  const { user, error, isLoading } = useUser();
+  const [userProfileData, setUserProfileData] = useState<User | null>(null);
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -48,14 +54,32 @@ export const Navbar = () => {
     />
   );
 
-  // test user data - remove when auth is implemented
-  const user = {
-    email: "user@example.com",
-    name: "John Doe",
-    lastName: "Smith",
-    phone: "123-456-7890",
-    showPhone: false,
+  const fetchUserProfile = async (sub: any) => {
+    try {
+      const response = await fetch("/api/users/profile/" + sub); //check auth0 user sub
+      const data = await response.json();
+      setUserProfileData(data);
+    } catch (error) {
+      console.error(error); //TODO: remove console.error
+    }
   };
+
+  useEffect(() => {
+    // user && fetchUserProfile(user.sub);
+    //tests
+    const user = {
+      id: 1,
+      name: "Test",
+      lastName: "Test",
+      email: "test@test.com",
+      phone: "623456789",
+      showPhone: true,
+      profileDescription: "Test",
+      state: "Cataluña",
+      city: "Barcelona",
+    };
+    setUserProfileData(user);
+  }, []);
 
   return (
     <NextUINavbar maxWidth="full" position="sticky">
@@ -93,12 +117,28 @@ export const Navbar = () => {
             </NavbarItem>
           ))}
         </div>
-        {/* TODO: add conditional render for login or show avatar */}
+        {/* TODO: add conditional render for login text or show avatar */}
         <NavbarItem className="hidden md:flex">
-          <Link href="#">Iniciar Sesión</Link>
+          {/* <Link href="#">Iniciar Sesión</Link> */}
+          {!user && (
+            <NextLink href="/api/auth/login" passHref>
+              <NextUILink>Iniciar Sesión</NextUILink>
+            </NextLink>
+          )}
+          {user && (
+            <UserProfileModal
+              user={userProfileData}
+              picture={user.picture}
+              updateUser={setUserProfileData}
+            ></UserProfileModal>
+          )}
         </NavbarItem>
         <NavbarItem>
-          <UserProfileModal user={user}/>
+          <UserProfileModal
+            user={userProfileData}
+            picture={null}
+            updateUser={setUserProfileData}
+          />
         </NavbarItem>
       </NavbarContent>
 

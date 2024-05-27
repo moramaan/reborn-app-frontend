@@ -33,6 +33,7 @@ import { fontSans, fontMono } from "@/config/fonts";
 import { useRouter } from "next/router";
 import { ProductProvider } from "@/context/ProductContext";
 import { FilterProvider } from "@/context/FilterContext";
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -41,11 +42,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider defaultTheme="system">
-        <ProductProvider>
-          <FilterProvider>
-            <Component {...pageProps} />
-          </FilterProvider>
-        </ProductProvider>
+        <UserProvider>
+          <ProductProvider>
+            <FilterProvider>
+              <Component {...pageProps} />
+            </FilterProvider>
+          </ProductProvider>
+        </UserProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );
