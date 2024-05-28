@@ -204,7 +204,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   return (
     <>
       <Button isIconOnly onPress={onOpen} size="lg" radius="full">
-        <Avatar name={userProps?.name || "None"} isBordered src={user?.picture || ""} />
+        <Avatar showFallback name={userProps?.name || "None"} isBordered src={user?.picture || ""} />
       </Button>
       <Modal
         isOpen={isOpen}
