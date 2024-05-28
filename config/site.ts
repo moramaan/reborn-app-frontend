@@ -13,7 +13,7 @@ export const siteConfig = {
       href: "/upload-product",
     },
     {
-      label: "Search-test",
+      label: "Búsqueda",
       href: "/search",
     },
     {
@@ -31,16 +31,12 @@ export const siteConfig = {
       href: "/upload-product",
     },
     {
-      label: "Search-test",
+      label: "Búsqueda",
       href: "/search",
     },
     {
       label: "Soporte",
       href: "/help-feedback",
-    },
-    {
-      label: "Cerrar sessión",
-      href: "/",
     },
   ],
   links: {
