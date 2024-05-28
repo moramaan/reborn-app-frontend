@@ -103,20 +103,39 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <div className="hidden lg:flex gap-6 justify-start">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
+          {siteConfig.navItems.map((item) =>
+            //conditional rendering
+            item.href === "/upload-product" ? null : (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            )
+          )}
+          {siteConfig.navItems
+            .filter((item) => item.href === "/upload-product")
+            .map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  )}
+                  color="foreground"
+                  href={user ? item.href : "/api/auth/login"}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
         </div>
         <NavbarItem className="hidden md:flex">
           {!user && (
