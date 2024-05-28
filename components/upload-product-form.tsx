@@ -1,4 +1,3 @@
-// "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import {
@@ -170,131 +169,136 @@ export default function UploadForm() {
     }
   };
 
+  if (!user) {
+    router.push("/api/auth/login?returnTo=/upload-product-form");
+  }
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6">
-      <Card>
-        <CardBody>
-          {successMessage && (
-            <div className="text-green-500 mb-4">{successMessage}</div>
-          )}
-          {error && <div className="text-red-500 mb-4">{error}</div>}
-          <Input
-            isClearable
-            onClear={() => setFormData({ ...formData, title: "" })}
-            variant="bordered"
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Título"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            required
-            className="mb-4"
-          />
-          <Textarea
-            variant="bordered"
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Descripción"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            className="mb-2"
-          />
-          <Input
-            isClearable
-            onClear={() => setFormData({ ...formData, price: "" })}
-            variant="bordered"
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Precio"
-            name="price"
-            type="number"
-            value={formData.price}
-            onChange={handleInputChange}
-            required
-            className="mb-4"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-3">
-            <Autocomplete
+    user && (
+      <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6">
+        <Card>
+          <CardBody>
+            {successMessage && (
+              <div className="text-green-500 mb-4">{successMessage}</div>
+            )}
+            {error && <div className="text-red-500 mb-4">{error}</div>}
+            <Input
               isClearable
-              onClear={() => {
-                setSelectedCategory(null);
-                setFormData({ ...formData, category: "" });
-              }}
-              defaultItems={categories}
-              placeholder="Categoría"
-              selectedKey={selectedCategory?.value}
-              onSelectionChange={handleCategoryChange}
-              className="mb-4" // Add md:h-full class
-              size={"sm" as any}
-            >
-              {(item: Option) => (
-                <AutocompleteItem key={item.value}>
-                  {item.label}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
-            <Dropdown className="py-2">
-              <DropdownTrigger>
-                <Button variant="bordered" className="mb-4 md:mb-0" size="lg">
-                  {formData.condition
-                    ? conditions[formData.condition]
-                    : "Estado"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Condition">
-                <DropdownItem
-                  onClick={() => handleConditionChange(0)}
-                  key="not_set"
-                >
-                  Sin especificar
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => handleConditionChange(1)}
-                  key="new"
-                >
-                  Nuevo
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => handleConditionChange(2)}
-                  key="as_new"
-                >
-                  Como Nuevo
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => handleConditionChange(3)}
-                  key="good"
-                >
-                  Bueno
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <Input
-            isClearable
-            onClear={() => setFormData({ ...formData, images: null })}
-            variant="bordered"
-            fullWidth
-            color="primary"
-            size="lg"
-            type="file"
-            name="images"
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-            required
-            className="mb-4"
-          />
-          <Button type="submit" color="primary" size="lg" className="w-full">
-            Publicar Producto
-          </Button>
-        </CardBody>
-      </Card>
-    </form>
+              onClear={() => setFormData({ ...formData, title: "" })}
+              variant="bordered"
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Título"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+              className="mb-4"
+            />
+            <Textarea
+              variant="bordered"
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Descripción"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+              className="mb-2"
+            />
+            <Input
+              isClearable
+              onClear={() => setFormData({ ...formData, price: "" })}
+              variant="bordered"
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Precio"
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleInputChange}
+              required
+              className="mb-4"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-3">
+              <Autocomplete
+                isClearable
+                onClear={() => {
+                  setSelectedCategory(null);
+                  setFormData({ ...formData, category: "" });
+                }}
+                defaultItems={categories}
+                placeholder="Categoría"
+                selectedKey={selectedCategory?.value}
+                onSelectionChange={handleCategoryChange}
+                className="mb-4" // Add md:h-full class
+                size={"sm" as any}
+              >
+                {(item: Option) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+              <Dropdown className="py-2">
+                <DropdownTrigger>
+                  <Button variant="bordered" className="mb-4 md:mb-0" size="lg">
+                    {formData.condition
+                      ? conditions[formData.condition]
+                      : "Estado"}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Condition">
+                  <DropdownItem
+                    onClick={() => handleConditionChange(0)}
+                    key="not_set"
+                  >
+                    Sin especificar
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => handleConditionChange(1)}
+                    key="new"
+                  >
+                    Nuevo
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => handleConditionChange(2)}
+                    key="as_new"
+                  >
+                    Como Nuevo
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => handleConditionChange(3)}
+                    key="good"
+                  >
+                    Bueno
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <Input
+              isClearable
+              onClear={() => setFormData({ ...formData, images: null })}
+              variant="bordered"
+              fullWidth
+              color="primary"
+              size="lg"
+              type="file"
+              name="images"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
+              required
+              className="mb-4"
+            />
+            <Button type="submit" color="primary" size="lg" className="w-full">
+              Publicar Producto
+            </Button>
+          </CardBody>
+        </Card>
+      </form>
+    )
   );
 }
