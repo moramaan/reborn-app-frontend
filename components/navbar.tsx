@@ -8,7 +8,6 @@ import {
   NavbarBrand,
   NavbarItem,
   NavbarMenuItem,
-  Button,
 } from "@nextui-org/react";
 import { link as linkStyles } from "@nextui-org/theme";
 
@@ -25,9 +24,10 @@ import UserProfileModal from "@/components/user-profile-modal";
 import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { User } from "@/types/index";
+import { transformUser } from "@/utils/data-model-transforms";
 
 export const Navbar = () => {
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
   const [userProfileData, setUserProfileData] = useState<User | null>(null);
 
   const searchInput = (
@@ -55,31 +55,32 @@ export const Navbar = () => {
   );
 
   const fetchUserProfile = async (sub: any) => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     try {
-      const response = await fetch("/api/users/profile/" + sub); //check auth0 user sub
+      const response = await fetch(`${apiUrl}/users/3`); //check auth0 user sub
       const data = await response.json();
-      setUserProfileData(data);
+      setUserProfileData(transformUser(data));
     } catch (error) {
       console.error(error); //TODO: remove console.error
     }
   };
 
   useEffect(() => {
-    // user && fetchUserProfile(user.sub);
+    user && fetchUserProfile(user.sub);
     //tests
-    const user = {
-      id: 1,
-      name: "Test",
-      lastName: "Test",
-      email: "test@test.com",
-      phone: "623456789",
-      showPhone: true,
-      profileDescription: "Test",
-      state: "Cataluña",
-      city: "Barcelona",
-    };
-    setUserProfileData(user);
-  }, []);
+    // const user = {
+    //   id: 1,
+    //   name: "Test",
+    //   lastName: "Test",
+    //   email: "test@test.com",
+    //   phone: "623456789",
+    //   showPhone: true,
+    //   profileDescription: "Test",
+    //   state: "Cataluña",
+    //   city: "Barcelona",
+    // };
+    // setUserProfileData(user);
+  }, [user]);
 
   return (
     <NextUINavbar maxWidth="full" position="sticky">
@@ -117,9 +118,7 @@ export const Navbar = () => {
             </NavbarItem>
           ))}
         </div>
-        {/* TODO: add conditional render for login text or show avatar */}
         <NavbarItem className="hidden md:flex">
-          {/* <Link href="#">Iniciar Sesión</Link> */}
           {!user && (
             <NextLink href="/api/auth/login" passHref>
               <NextUILink>Iniciar Sesión</NextUILink>
@@ -127,18 +126,17 @@ export const Navbar = () => {
           )}
           {user && (
             <UserProfileModal
-              user={userProfileData}
-              picture={user.picture}
+              userProps={userProfileData}
               updateUser={setUserProfileData}
             ></UserProfileModal>
           )}
         </NavbarItem>
         <NavbarItem>
-          <UserProfileModal
-            user={userProfileData}
-            picture={null}
-            updateUser={setUserProfileData}
-          />
+          {user && (
+            <NextLink href="/api/auth/logout" passHref>
+              <NextUILink>Cerrar Sesión</NextUILink>
+            </NextLink>
+          )}
         </NavbarItem>
       </NavbarContent>
 
