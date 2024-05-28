@@ -15,31 +15,32 @@ import {
 } from "@nextui-org/react";
 import { Option } from "@/types";
 import { states, cities } from "@/data/locations";
-import { User } from "@/types/index";
+import { User as UserType } from "@/types/index";
+import fetchWithAuth from "@/utils/fetchAuth";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface UserProfileModalProps {
-  user: User | null;
-  picture: string | null | undefined;
-  updateUser: (user: User) => void;
+  userProps: UserType | null;
+  updateUser: (userProps: UserType) => void;
 }
 
 const UserProfileModal: React.FC<UserProfileModalProps> = ({
-  user,
-  picture,
+  userProps,
   updateUser,
 }) => {
+  const { user } = useUser();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedState, setSelectedState] = useState<Option | null>(null);
   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
   const [formData, setFormData] = useState({
-    email: user?.email || "",
-    name: user?.name || "",
-    lastName: user?.lastName || "",
-    phone: user?.phone || "",
-    showPhone: user?.showPhone || false,
-    state: user?.state || "",
-    city: user?.city || "",
+    email: userProps?.email || "",
+    name: userProps?.name || "",
+    lastName: userProps?.lastName || "",
+    phone: userProps?.phone || "",
+    showPhone: userProps?.showPhone || false,
+    state: userProps?.state || "",
+    city: userProps?.city || "",
   });
   const [formErrors, setFormErrors] = useState({
     name: false,
@@ -47,30 +48,39 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
     phone: false,
   });
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        email: user.email,
-        name: user.name,
-        lastName: user.lastName,
-        phone: user.phone,
-        showPhone: user.showPhone,
-        state: user.state,
-        city: user.city,
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     setFormData({
+  //       email: user.email,
+  //       name: user.name,
+  //       lastName: user.lastName,
+  //       phone: user.phone,
+  //       showPhone: user.showPhone,
+  //       state: user.state,
+  //       city: user.city,
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
-    if (user) {
+    if (userProps) {    
+      setFormData({
+        email: userProps.email,
+        name: userProps.name,
+        lastName: userProps.lastName,
+        phone: userProps.phone,
+        showPhone: userProps.showPhone,
+        state: userProps.state,
+        city: userProps.city,
+      });
       setSelectedState(
-        states.find((state) => state.value === user.state) || null
+        states.find((state) => state.value === userProps.state) || null
       );
       setSelectedCity(
-        cities[user.state]?.find((city) => city.value === user.city) || null
+        cities[userProps.state]?.find((city) => city.value === userProps.city) || null
       );
     }
-  }, [user]);
+  }, [userProps]);
 
   const handleStateChange = (key: React.Key) => {
     const state = states.find((state: Option) => state.value === key);
@@ -135,7 +145,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
 
     if (isNameValid && isLastNameValid && isPhoneValid) {
       const updatedUser = {
-        ...user!,
+        ...userProps!,
         name: formData.name,
         lastName: formData.lastName,
         phone: formData.phone,
@@ -145,23 +155,22 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
       };
       updateUser(updatedUser);
       setIsEditing(false);
-      // fetch the api to update the user
+
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       try {
-        const response = await fetch(`${apiUrl}/users/${user?.id}`, {
+        const response = await fetchWithAuth(`${apiUrl}/users/${userProps?.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(updatedUser),
         });
+
         if (response.ok) {
-          console.log(
-            "User data saved successfully",
-            JSON.stringify(updatedUser)
-          );
+          const data = await response.json();
         } else {
-          console.error("Error saving user data");
+          //TODO: show error message
+          handleCancelClick();
         }
       } catch (error) {
         console.error("Error saving user data", error);
@@ -171,13 +180,13 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
 
   const handleCancelClick = () => {
     setFormData({
-      email: user?.email || "",
-      name: user?.name || "",
-      lastName: user?.lastName || "",
-      phone: user?.phone || "",
-      showPhone: user?.showPhone || false,
-      state: user?.state || "",
-      city: user?.city || "",
+      email: userProps?.email || "",
+      name: userProps?.name || "",
+      lastName: userProps?.lastName || "",
+      phone: userProps?.phone || "",
+      showPhone: userProps?.showPhone || false,
+      state: userProps?.state || "",
+      city: userProps?.city || "",
     });
     setIsEditing(false);
     setFormErrors({
@@ -195,7 +204,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   return (
     <>
       <Button isIconOnly onPress={onOpen} size="lg" radius="full">
-        <Avatar name={user?.name || "None"} isBordered src={picture || ""} />
+        <Avatar name={userProps?.name || "None"} isBordered src={user?.picture || ""} />
       </Button>
       <Modal
         isOpen={isOpen}
