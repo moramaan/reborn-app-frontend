@@ -471,8 +471,17 @@ const FilterCard: React.FC<FilterCardProps> = ({
   }, [filters, maxValue]);
   return (
     <Card className="p-4 max-w-sm" shadow="sm">
-      <CardHeader>
+      {/* <CardHeader>
         <h4 className="text-lg font-semibold">Filtros</h4>
+      </CardHeader> */}
+      <CardHeader className="flex justify-between items-center">
+        <h4 className="text-lg font-semibold">Filtros</h4>
+        <Button
+          onClick={() => setFilters([])}
+          className="text-sm bg-gray-400 text-white py-1 px-3 rounded-md"
+        >
+          Restablecer
+        </Button>
       </CardHeader>
       <CardBody>
         {/* Price Range Filter */}
