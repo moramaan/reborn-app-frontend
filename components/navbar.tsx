@@ -25,11 +25,27 @@ import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { User } from "@/types/index";
 import { transformUser } from "@/utils/data-model-transforms";
+import { useFilterContext } from "@/context/FilterContext";
+import { useRouter } from "next/router";
 
 export const Navbar = () => {
+  const { filters, setFilters } = useFilterContext();
+  const [inputText, setInputText] = useState("");
   const { user } = useUser();
   const [userProfileData, setUserProfileData] = useState<User | null>(null);
+  const router = useRouter();
 
+  const handleSearch = () => {
+    if (inputText.trim() !== "") {
+      // Set filter to search by name
+      setFilters([...filters, { column: "name", value: inputText }]);
+      // Redirect to search page
+      router.push("/search");
+    } else {
+      // Redirect to search page without any filters
+      router.push("/search");
+    }
+  };
   const searchInput = (
     <Input
       aria-label="Search"
@@ -46,18 +62,21 @@ export const Navbar = () => {
           color="green"
           size="md"
           style={{ width: "2rem" }}
+          onClick={handleSearch}
         >
           <SearchIcon className="text-base pointer-events-none flex-shrink-0" />
         </SearchButton>
       }
       type="search"
+      value={inputText}
+      onChange={(e) => setInputText(e.target.value)}
     />
   );
 
   const fetchUserProfile = async (sub: any) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     try {
-      const response = await fetch(`${apiUrl}/users/3`); //check auth0 user sub
+      const response = await fetch(`${apiUrl}/users/3`); //TODO: once backend is ready, change the hardcoded id to sub
       const data = await response.json();
       setUserProfileData(transformUser(data));
     } catch (error) {
@@ -67,19 +86,6 @@ export const Navbar = () => {
 
   useEffect(() => {
     user && fetchUserProfile(user.sub);
-    //tests
-    // const user = {
-    //   id: 1,
-    //   name: "Test",
-    //   lastName: "Test",
-    //   email: "test@test.com",
-    //   phone: "623456789",
-    //   showPhone: true,
-    //   profileDescription: "Test",
-    //   state: "Cataluña",
-    //   city: "Barcelona",
-    // };
-    // setUserProfileData(user);
   }, [user]);
 
   return (
@@ -167,26 +173,85 @@ export const Navbar = () => {
       <NavbarMenu className="little-menu">
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
+          <NavbarMenuItem className="hidden md:flex">
+            {!user && (
+              <NextLink href="/api/auth/login" passHref>
+                <NextUILink>Iniciar Sesión</NextUILink>
+              </NextLink>
+            )}
+            {user && (
+              <UserProfileModal
+                userProps={userProfileData}
+                updateUser={setUserProfileData}
+              ></UserProfileModal>
+            )}
+          </NavbarMenuItem>
+          {siteConfig.navMenuItems.map((item, index) =>
+            //conditional rendering
+            item.href === "/upload-product" || item.href === "/help-feedback" ? null : (
+              <NavbarMenuItem key={`${item}-${index}`}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({
+                      color: "foreground",
+                    }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  )}
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarMenuItem>
+            )
+          )}
+          {siteConfig.navItems
+            .filter((item) => item.href === "/upload-product")
+            .map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  )}
+                  color="foreground"
+                  href={user ? item.href : "/api/auth/login"}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
+          {siteConfig.navItems
+            .filter((item) => item.href === "/help-feedback")
+            .map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "danger" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
+          <NavbarMenuItem>
+            {user && (
               <NextLink
+                href="/api/auth/logout"
+                passHref
                 className={clsx(
                   linkStyles({
-                    color:
-                      index === 2
-                        ? "primary"
-                        : index === siteConfig.navMenuItems.length - 1
-                        ? "danger"
-                        : "foreground",
+                    color: "danger",
                   }),
                   "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
-                href={item.href}
               >
-                {item.label}
+                <NextUILink>Cerrar Sesión</NextUILink>
               </NextLink>
-            </NavbarMenuItem>
-          ))}
+            )}
+          </NavbarMenuItem>
         </div>
       </NavbarMenu>
     </NextUINavbar>

@@ -9,7 +9,7 @@ import {
   CheckboxGroup,
   Slider,
 } from "@nextui-org/react";
-import { useFilterContext } from "@/context/FilterContext";
+import { useFilterContext, Filter } from "@/context/FilterContext";
 import { states, cities } from "@/data/locations";
 import CustomCheckbox from "@/components/custom-checkbox";
 import CustomRadioGroup from "@/components/custom-radio-group";
@@ -79,22 +79,47 @@ const FilterCard: React.FC<FilterCardProps> = ({
   };
 
   const handleApplyFilters = () => {
-    const localFilters = {
-      minPrice,
-      maxPrice,
-      categories: selectedCategories,
-      condition: selectedCondition,
-      state: selectedState?.value || "",
-      city: selectedCity?.value || "",
-      publishedSince,
-    };
+    const localFilters: Filter[] = [];
+
+    // Price Range Filter
+    if (minPrice !== 0 || maxPrice !== maxValue) {
+      localFilters.push({
+        column: "price",
+        min: minPrice,
+        max: maxPrice,
+        value: "",
+      });
+    }
+
+    // Category Filter
+    selectedCategories.forEach((category) => {
+      localFilters.push({ column: "category", value: category });
+    });
+
+    // Condition Filter
+    if (selectedCondition) {
+      localFilters.push({ column: "condition", value: selectedCondition });
+    }
+
+    // State Filter
+    if (selectedState) {
+      localFilters.push({ column: "state", value: selectedState.value });
+    }
+
+    // City Filter
+    if (selectedCity) {
+      localFilters.push({ column: "city", value: selectedCity.value });
+    }
+
+    // Published Since Filter
+    if (publishedSince) {
+      localFilters.push({ column: "publishedSince", value: publishedSince });
+    }
 
     setFilters(localFilters);
 
     // Close the filter card after applying filters only if isModal is true
     isModal && setIsFilterOpen(false);
-
-    // Optionally make an API call here if you want to fetch filtered data immediately
   };
 
   const handleSliderChange = (value: number | number[]) => {
@@ -105,38 +130,61 @@ const FilterCard: React.FC<FilterCardProps> = ({
   };
 
   useEffect(() => {
-    setMinPrice(filters.minPrice || 0);
+    setMinPrice(filters.find((filter) => filter.column === "price")?.min || 0);
     setMaxPrice(
-      filters.maxPrice !== null
-        ? maxValue < filters.maxPrice
-          ? maxValue
-          : filters.maxPrice
-        : maxValue
+      filters.find((filter) => filter.column === "price")?.max || maxValue
     );
-    setSelectedCategories(filters.categories);
-    setSelectedCondition(filters.condition);
-    //TODO: Fix this (state and city selection not working properly)
+    setSelectedCategories(
+      filters
+        .filter((filter) => filter.column === "category")
+        .map((filter) => filter.value)
+    );
+    setSelectedCondition(
+      filters.find((filter) => filter.column === "condition")?.value || ""
+    );
+
     let filterState: Option | null = null;
-    if (filters.state) {
-      const foundState = states.find((state) => state.value === filters.state);
+    if (filters.find((filter) => filter.column === "state")) {
+      const foundState = states.find(
+        (state) =>
+          state.value ===
+          filters.find((filter) => filter.column === "state")?.value
+      );
       filterState = foundState ? foundState : null;
     }
     setSelectedState(filterState);
-    let filterCity: Option | null = null;
-    if (filters.city) {
-      const foundCity = cities[filters.state].find(
-        (city) => city.value === filters.city
-      );
-      filterCity = foundCity ? foundCity : null;
-    }
-    setSelectedCity(filterCity);
-    setPublishedSince(filters.publishedSince);
-  }, [filters]);
 
+    let filterCity: Option | null = null;
+    if (filters.find((filter) => filter.column === "city")) {
+      const stateFilter = filters.find((filter) => filter.column === "state");
+      if (stateFilter && stateFilter.value) {
+        const foundCity = cities[stateFilter.value]?.find(
+          (city: Option) =>
+            city.value ===
+            filters.find((filter) => filter.column === "city")?.value
+        );
+        filterCity = foundCity || null;
+      }
+    }
+
+    setSelectedCity(filterCity);
+    setPublishedSince(
+      filters.find((filter) => filter.column === "publishedSince")?.value || ""
+    );
+  }, [filters, maxValue]);
   return (
     <Card className="p-4 max-w-sm" shadow="sm">
-      <CardHeader>
+      {/* <CardHeader>
         <h4 className="text-lg font-semibold">Filtros</h4>
+      </CardHeader> */}
+      <CardHeader className="flex justify-between items-center">
+        <h4 className="text-lg font-semibold">Filtros</h4>
+        <Button
+          onClick={() => setFilters([])}
+          className="text-sm bg-gray-400 text-white py-1 px-3 rounded-md"
+        >
+          Restablecer
+        </Button>
       </CardHeader>
       <CardBody>
         {/* Price Range Filter */}
@@ -283,7 +331,6 @@ const FilterCard: React.FC<FilterCardProps> = ({
         <Button
           onClick={handleApplyFilters}
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-          // className="w-full bg-gradient-to-r from-primary-500 to-secondary-400 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
         >
           Aplicar filtros
         </Button>

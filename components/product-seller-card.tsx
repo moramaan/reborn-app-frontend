@@ -3,6 +3,7 @@ import { Card, CardHeader, Avatar, Button } from "@nextui-org/react";
 import { HeartIcon } from "@/components/icons";
 import UserContactData from "@/components/user-contact-data";
 import { User } from "@/types";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ProductSellerCardProps {
   owner: User | null;
@@ -10,6 +11,7 @@ interface ProductSellerCardProps {
 
 export default function ProductSellerCard({ owner }: ProductSellerCardProps) {
   const [liked, setLiked] = useState(false);
+  const { user } = useUser();
 
   console.log(`Owner: ${JSON.stringify(owner)}`);
 
@@ -40,7 +42,7 @@ export default function ProductSellerCard({ owner }: ProductSellerCardProps) {
               ? `${owner.name} ${owner.lastName.substring(0, 1) + "."}`
               : ""}
           </h4>
-          {owner && (
+          {owner && user && (
             <UserContactData
               name={`${owner.name} ${owner.lastName}`}
               email={owner.email}

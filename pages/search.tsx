@@ -1,12 +1,11 @@
+import React, { useState, useEffect } from "react";
 import FilterCard from "@/components/filter-card";
 import { subtitle, title } from "@/components/primitives";
 import SearchLayout from "@/layouts/search-layout";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 import { useProductContext } from "@/context/ProductContext";
 import { Product } from "@/types/index";
 import { useFilterContext } from "@/context/FilterContext";
-const { v4: uuidv4 } = require("uuid");
 
 // dynamic import with SSR disabled due to hydration error
 const ProductCard = dynamic(() => import("@/components/product-card"), {
@@ -25,28 +24,30 @@ function findMaxValue(products: Product[]) {
 }
 
 export default function SearchPage() {
+  const { filters, setFilters } = useFilterContext();
   const { products, setProducts } = useProductContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [maxValue, setMaxValue] = useState<number>(1000);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
-  const { filters } = useFilterContext();
 
-  //first fetch of products
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
-  const fetchProductData = async () => {
+  // Fetch products with filters applied
+  const fetchProductData = async (filter: boolean) => {
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      //TODO: FETCH FILTERED PRODUCTS
-      const response = await fetch(`${apiUrl}/items`);
+      const response = await fetch(`${apiUrl}/items/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: filter ? JSON.stringify({ filters }) : null,
+      });
+
       if (!response.ok) {
         throw new Error("Failed to fetch product data");
       }
       const jsonData = await response.json();
-      setProducts(jsonData); //TODO change the assignment with fetched products
+      setProducts(jsonData); // Set the fetched products
       setMaxValue(findMaxValue(jsonData));
       setLoading(false);
     } catch (error: any) {
@@ -56,8 +57,15 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
-    fetchProductData();
-  }, [filters]);
+    fetchProductData(true);
+  }, [filters]); // Trigger fetching whenever filters change
+
+  // Reset filters when the component is unmounted
+  useEffect(() => {
+    return () => {
+      setFilters([]); // Reset filters
+    };
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -80,8 +88,11 @@ export default function SearchPage() {
       <section className="flex flex-col items-center justify-center py-4">
         <div className="grid grid-cols-12 gap-5 max-w-[1400px] w-full text-center items-center justify-between font-mono text-sm sm:mt-5">
           <div className="lg:col-span-3 h-full hidden lg:block">
-            <FilterCard maxValue={maxValue} isModal={false} setIsFilterOpen={setIsFilterOpen} />
-            {/* <DynamicFilterCard maxValue={maxValue} /> */}
+            <FilterCard
+              maxValue={maxValue}
+              isModal={false}
+              setIsFilterOpen={setIsFilterOpen}
+            />
           </div>
           <div className="col-span-12 lg:col-span-9 h-full">
             <div className="flex justify-end mb-4 lg:hidden">
@@ -95,8 +106,11 @@ export default function SearchPage() {
             {isFilterOpen && (
               <div className="z-50 fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center lg:hidden">
                 <div className="relative">
-                  <FilterCard maxValue={maxValue} isModal setIsFilterOpen={setIsFilterOpen} />
-                  {/* <DynamicFilterCard maxValue={maxValue} /> */}
+                  <FilterCard
+                    maxValue={maxValue}
+                    isModal
+                    setIsFilterOpen={setIsFilterOpen}
+                  />
                   <button
                     className="absolute top-5 right-5 z-10 bg-red-500 text-white px-4 py-2 rounded mb-4"
                     onClick={() => setIsFilterOpen(false)}
