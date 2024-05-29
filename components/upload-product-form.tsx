@@ -16,6 +16,7 @@ import {
 
 import { Option } from "@/types";
 import router from "next/router";
+import fetchWithAuth from "@/utils/fetchAuth";
 
 interface FormData {
   title: string;
@@ -132,7 +133,7 @@ export default function UploadForm() {
     }
 
     try {
-      const response = await fetch(`${apiUrl}/items`, {
+      const response = await fetchWithAuth(`${apiUrl}/items`, {
         method: "POST",
         headers: {
           //cors
