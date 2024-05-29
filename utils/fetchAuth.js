@@ -9,7 +9,7 @@ const getToken = async () => {
   const token = getCookie("accessToken");
   if (token) return token;
 
-  const apiUrl = `${process.env.GET_TOKEN_URL}`;
+  const apiUrl = process.env.NEXT_PUBLIC_GET_TOKEN_URL;
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
@@ -24,7 +24,6 @@ export default async function fetchWithAuth(url, options = {}) {
   if (!accessToken) {
     throw new Error("No access token found.");
   }
-
   if (accessToken) {
     if (!options.headers) {
       options.headers = {};

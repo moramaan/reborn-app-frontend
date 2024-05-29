@@ -63,7 +63,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   // }, []);
 
   useEffect(() => {
-    if (userProps) {    
+    if (userProps) {
       setFormData({
         email: userProps.email,
         name: userProps.name,
@@ -77,7 +77,9 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
         states.find((state) => state.value === userProps.state) || null
       );
       setSelectedCity(
-        cities[userProps.state]?.find((city) => city.value === userProps.city) || null
+        cities[userProps.state]?.find(
+          (city) => city.value === userProps.city
+        ) || null
       );
     }
   }, [userProps]);
@@ -158,22 +160,42 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       try {
-        const response = await fetchWithAuth(`${apiUrl}/users/${userProps?.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUser),
-        });
+        //TODO: fix fetch with multiple data
+        // const response = await fetchWithAuth(
+        //   `${apiUrl}/users/${userProps?.id}`,
+        //   {
+        //     method: "PUT",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify([
+        //       JSON.stringify(user),
+        //       JSON.stringify(updatedUser),
+        //     ]),
+        //   }
+        // );
+        const response = await fetchWithAuth(
+          `${apiUrl}/users/${userProps?.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedUser),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
+          console.log("User data saved", data);
         } else {
           //TODO: show error message
+          console.error("Failed to save user data");
           handleCancelClick();
         }
       } catch (error) {
         console.error("Error saving user data", error);
+        handleCancelClick();
       }
     }
   };
@@ -204,7 +226,12 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   return (
     <>
       <Button isIconOnly onPress={onOpen} size="lg" radius="full">
-        <Avatar showFallback name={userProps?.name || "None"} isBordered src={user?.picture || ""} />
+        <Avatar
+          showFallback
+          name={userProps?.name || "None"}
+          isBordered
+          src={user?.picture || ""}
+        />
       </Button>
       <Modal
         isOpen={isOpen}
